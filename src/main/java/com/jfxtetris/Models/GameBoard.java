@@ -1,11 +1,15 @@
 package com.jfxtetris.Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameBoard {
 
     int BoardWidth = 12;
     int BoardHeight = 18;
     int[] playField; //Maybe change this datatype
 
+    public List<Integer> vLines = new ArrayList<>();
     //--Constructors
 
     public GameBoard(){
@@ -22,6 +26,12 @@ public class GameBoard {
 
         for (int grid:playField) {
             grid = 0;
+        }
+
+        for(int x=0; x< BoardWidth; x++){
+            for(int y = 0; y < BoardHeight; y++){
+                playField[y * BoardWidth + x] =(x == 0 || x == BoardWidth - 1 || y == BoardHeight - 1) ? 9 : 0;
+            }
         }
     }
 
@@ -75,15 +85,15 @@ public class GameBoard {
                 // not necessarily mean a fail, as the long vertical piece
                 // can have cells that lie outside the boundary, so we'll
                 // just ignore them
-                if (nPosX + px >= 0 && nPosX + px < BoardWidth)
+                if (nPosX + px >= 0 && (nPosX + px < BoardWidth))
                 {
                     if (nPosY + py >= 0 && nPosY + py < BoardHeight)
                     {
                         // In Bounds so do collision check
-                        if(Tetrominos.shapes.get(nTetromino).charAt(pi) != '.' && playField[fi] !=0)
-                            return false; // fail on first hit
-                    } else return false;
-                } else return false;
+                        if (Tetrominos.shapes.get(nTetromino).charAt(pi) == 'x' && playField[fi] != 0)
+                            return false;
+                    }
+                }
             }
 
         return true;

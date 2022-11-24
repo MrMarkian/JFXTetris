@@ -4,7 +4,10 @@ import com.jfxtetris.Models.GameBoard;
 import com.jfxtetris.Models.Tetrominos;
 import com.jfxtetris.Views.BoardRenderer;
 import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -12,17 +15,21 @@ import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static com.sun.javafx.scene.control.skin.Utils.getResource;
+import javafx.scene.media.AudioClip;
+
 
 public class GameManager {
     GameBoard gameBoard = new GameBoard();
     BoardRenderer boardRenderer = new BoardRenderer(gameBoard);
+    MainWindowController mainUI;
+
     Pane RenderPane;
+    Label scoreLabel;
+    VBox outputBox;
+
     Timer FPSTimer = new Timer();
     Timer LogicTimer = new Timer();
     Timer InputTimer = new Timer();
@@ -37,13 +44,16 @@ public class GameManager {
     InputHandler input ;
 
     CurrentPiece player1 = new CurrentPiece();
-
     boolean gameOver = false;
 
     Sequencer sequencer;
 
+    int gameScore = 0;
+    int totalLines = 0;
+    public List<Integer> pieceHistory = new ArrayList<>();
+
     public class CurrentPiece{
-        public int PieceType = ThreadLocalRandom.current().nextInt(1,7+1);
+        public int PieceType = ThreadLocalRandom.current().nextInt(1,8+1);
         public int Rotation = 0;
         public int XPos = gameBoard.GetBoardWidth() /2;
         public int YPos = 0;
@@ -51,13 +61,15 @@ public class GameManager {
 
 
 
-    public GameManager(Pane renderPane) throws MidiUnavailableException {
+    public GameManager(Pane renderPane, VBox out) throws MidiUnavailableException {
         RenderPane = renderPane;
         input = new InputHandler(RenderPane.getScene());
+        outputBox = out;
     }
 
     public void StartNewGame() throws MidiUnavailableException, InvalidMidiDataException, IOException, URISyntaxException {
             //process input
+            pieceHistory.add(player1.PieceType);
             InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,INPUTdelay + 10L);
             //Game Logic
             LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, lOGICdelay + 10L);
@@ -68,6 +80,7 @@ public class GameManager {
         } catch (MidiUnavailableException e) {
             throw new RuntimeException(e);
         }
+        //Todo: Create a media controller class
 
         sequencer.open();
         InputStream is = new BufferedInputStream(new FileInputStream(new File("C:\\GIT\\JFXTetris\\src\\main\\resources\\Midi\\Tetris - A Theme.mid")));
@@ -77,13 +90,14 @@ public class GameManager {
     }
 
     private void RunInputs(){
+        UpdateBackgroundMusic();
 
         if(input.leftPressed.get()){ //LEFT KEY
             if(gameBoard.DoesPieceFit(player1.PieceType, player1.Rotation, player1.XPos -1, player1.YPos)){
                 player1.XPos --;
                 input.leftPressed.set(false);
                 UpdateBoards();
-                UpdateBackgroundMusic();
+
             }
         }
 
@@ -150,6 +164,7 @@ public class GameManager {
 
         @Override
         public void run() {
+
             if(forceDown){
                 if(gameBoard.DoesPieceFit(player1.PieceType, player1.Rotation, player1.XPos, player1.YPos+1)){
                     player1.YPos++;
@@ -176,15 +191,18 @@ public class GameManager {
                             }
 
                             if(bLine){
+
                                for(int px = 1; px < gameBoard.GetBoardWidth() -1; px++){
-                                      gameBoard.GetBoard()[(player1.YPos + py) * gameBoard.GetBoardWidth() + px] = 8;
+                                      gameBoard.GetBoard()[(player1.YPos + py) * gameBoard.GetBoardWidth() + px] = -1;
                                   }
+                                gameBoard.vLines.add(player1.YPos + py);
                               }
 
                         }
                     }
 
                     // choose next piece
+                    pieceHistory.add(player1.PieceType);
                     player1 = null;
                     player1 = new CurrentPiece();
 
@@ -216,12 +234,101 @@ public class GameManager {
                UpdateBoards();
                UpdateUI();
 
+               if(!gameBoard.vLines.isEmpty()){
+                   for (int line : gameBoard.vLines) {
+                       for(int px = 1; px < gameBoard.GetBoardWidth() -1; px++){
+                           for (int py = line; py > 0; py--){
+                               gameBoard.GetBoard()[py * gameBoard.GetBoardWidth() + px] = gameBoard.GetBoard()[(py -1) * gameBoard.GetBoardWidth() + px];
+                               gameBoard.GetBoard()[px] =0;
+                           }
+                       }
+                   }
+                   gameScore += (gameBoard.vLines.size() * 100);
+                   totalLines += gameBoard.vLines.size();
+
+
+                   switch (gameBoard.vLines.size()) {
+                       case 1 -> {
+                           String path = "src/main/resources/Voice/1.wav";
+                           AudioClip media = new AudioClip(new File(path).toURI().toString());
+                           media.play();
+                           break;
+
+                       }
+                       case 2 -> {
+                           String path = "src/main/resources/Voice/2.wav";
+                           AudioClip media = new AudioClip(new File(path).toURI().toString());
+                           media.play();
+                           break;
+                       }
+                       case 3 -> {
+                           String path = "src/main/resources/Voice/3.wav";
+                           AudioClip media = new AudioClip(new File(path).toURI().toString());
+                           media.play();
+                           break;
+                       }
+                       case 4 -> {
+                           String path = "src/main/resources/Voice/4.wav";
+                           AudioClip media = new AudioClip(new File(path).toURI().toString());
+                           media.play();
+                           break;
+                       }
+                       case 5 -> {
+                           String path = "src/main/resources/Voice/5.wav";
+                           AudioClip media = new AudioClip(new File(path).toURI().toString());
+                           media.play();
+                           break;
+                       }
+                       default -> {
+
+                       }
+                   }
+
+                   gameBoard.vLines.clear();
+
+               }
            });
        }
    }
 
     private void UpdateUI() {
+        for (Node n:outputBox.getChildren()) {
+            if(n.getId() == null)
+                continue;
+           if(n.getId().toString().equals("ScoreLabel")){
+               ((Label)n).setText("SCORE: " + gameScore);
+           }
+           if(n.getId().toString().equals("TotalLinesLabel")){
+                ((Label)n).setText("TOTAL LINES: " + totalLines);
+           }
 
+           if(n.getId().equals("StatsLabel")){
+               ((Label)n).setText(GenerateStats());
+           }
+
+        }
+
+    }
+
+    private String GenerateStats(){
+
+        int tetrinomoStats[] = new int[9];
+
+
+        if(!pieceHistory.isEmpty()){
+            for (int piece:pieceHistory) {
+                tetrinomoStats[piece]++;
+            }
+
+            StringBuilder returnText = new StringBuilder();
+
+            returnText.append("STATS:\n");
+            for(int a = 1; a < 9; a++ ){
+                returnText.append(a).append(" : ").append(tetrinomoStats[a]).append("\n");
+            }
+
+            return returnText.toString();
+        } else return "STATS:";
     }
 
     public void UpdateBoards(){

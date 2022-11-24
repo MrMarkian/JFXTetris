@@ -13,10 +13,10 @@ public class Tetrominos {
                      "...." +
                      "....");
 
-        shapes.add( "..x." +
-                    "..x." +
-                    "..x." +
-                    "..x.");
+        shapes.add( "...x" +
+                    "...x" +
+                    "...x" +
+                    "...x");
 
         shapes.add( "..x." +
                     ".xx." +
@@ -46,6 +46,11 @@ public class Tetrominos {
         shapes.add( ".xx." +
                     "..xx" +
                     "...." +
+                    "....");
+
+        shapes.add( ".x.." +
+                    ".xx." +
+                    ".x.." +
                     "....");
     }
 

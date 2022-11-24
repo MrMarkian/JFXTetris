@@ -8,6 +8,11 @@ public class Tetrominos {
 
     public Tetrominos(){
 
+        shapes.add( "...." + //Zero state is invalid.. should not be used.
+                     "...." +
+                     "...." +
+                     "....");
+
         shapes.add( "..x." +
                     "..x." +
                     "..x." +

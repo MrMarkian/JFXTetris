@@ -6,6 +6,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 public class MainWindowController {
 
     @FXML
@@ -16,8 +21,17 @@ public class MainWindowController {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                GameManager gameManager = new GameManager(RenderPane);
-                gameManager.StartNewGame();
+                GameManager gameManager = null;
+                try {
+                    gameManager = new GameManager(RenderPane);
+                } catch (MidiUnavailableException e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    gameManager.StartNewGame();
+                } catch (MidiUnavailableException | InvalidMidiDataException | IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 

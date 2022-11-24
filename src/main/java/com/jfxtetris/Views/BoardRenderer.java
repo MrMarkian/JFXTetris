@@ -17,7 +17,7 @@ public class BoardRenderer {
 
     public BoardRenderer(GameBoard board){
         pFieldToRender = board;
-        DoubleBuffer = new int[pFieldToRender.GetBoardWidth() * pFieldToRender.GetBoardHeight()];
+        DoubleBuffer = pFieldToRender.GetBoard().clone();
         RefreshBuffer();
     }
 
@@ -26,11 +26,13 @@ public class BoardRenderer {
     }
 
     public Pane RenderBoardToPane(GameManager.CurrentPiece player){
+        RefreshBuffer();
+
         Pane graphicsContext = new Pane();
         int xPos=0, yPos =0, currentSquare =0;
-        int TopOffset = 10, LeftOffset = 10, padding = 5;
+        int TopOffset = 20, LeftOffset = 20, padding = 10;
 
-        for(int px = 0; px < 4; px++){
+        for(int px = 0; px < 4; px++){ //render player overlayed into double buffer
             for(int py=0; py < 4; py++){
 
                 if(Tetrominos.shapes.get(player.PieceType).charAt(pFieldToRender.Rotate(px,py, player.Rotation)) == 'x'){
@@ -44,11 +46,30 @@ public class BoardRenderer {
 
             switch (grid){
                 case 0:{
-                    r.setFill(Color.GRAY);
+                    r.setFill(Color.AQUA);
                     break;
                 }
                 case 1:{
                     r.setFill(Color.RED);
+                    break;
+                }
+                case 2:{
+
+                }
+                case 3:{
+                    r.setFill(Color.BLUE);
+                    break;
+                }
+                case 4:{
+                    r.setFill(Color.GREEN);
+                    break;
+                }
+                case 5:{
+                    r.setFill(Color.PINK);
+                    break;
+                }
+                case 6:{
+                    r.setFill(Color.YELLOWGREEN);
                     break;
                 }
 

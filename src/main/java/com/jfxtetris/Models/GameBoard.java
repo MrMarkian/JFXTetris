@@ -45,31 +45,46 @@ public class GameBoard {
     //----- Methods
 
     public int Rotate(int px, int py, int r){
-        return switch (r % 4) {
-            case 0 -> py * 4 + px;
-            case 1 -> 12 + py - (px * 4);
-            case 2 -> 15 - (py * 4) - px;
-            case 3 -> 3 - py + (px * 4);
-            default -> 0;
-        };
+        switch (r % 4) {
+            case 0:
+                return py * 4 + px;
+            case 1:
+                return 12 + py - (px * 4);
+            case 2:
+                return 15 - (py * 4) - px;
+            case 3:
+                return 3 - py + (px * 4);
+            default:
+                return -1;
+          }
 
     }
 
-    boolean DoesPieceFit(int nTetromino, int nRotation, int nPosX, int nPosY){
+    public boolean DoesPieceFit(int nTetromino, int nRotation, int nPosX, int nPosY){
 
-        for(int px = 0; px < 4; px++){
-            for(int py = 0; py< 4; py++){
+        for (int px = 0; px < 4; px++)
+            for (int py = 0; py < 4; py++)
+            {
+                // Get index into piece
+                int pi = Rotate(px, py, nRotation);
 
-                int pi = Rotate(px,py, nRotation);
+                // Get index into field
                 int fi = (nPosY + py) * BoardWidth + (nPosX + px);
 
-                if (nPosX + px >= 0 && nPosX + px < BoardHeight){
-                    if(nPosY + py >= 0 && nPosY + py < BoardWidth) {
-                        if(Tetrominos.shapes.get(nTetromino).charAt(pi) == 'x' && playField[fi] !=0) return false;
-                    }
-                }
+                // Check that test is in bounds. Note out of bounds does
+                // not necessarily mean a fail, as the long vertical piece
+                // can have cells that lie outside the boundary, so we'll
+                // just ignore them
+                if (nPosX + px >= 0 && nPosX + px < BoardWidth)
+                {
+                    if (nPosY + py >= 0 && nPosY + py < BoardHeight)
+                    {
+                        // In Bounds so do collision check
+                        if(Tetrominos.shapes.get(nTetromino).charAt(pi) != '.' && playField[fi] !=0)
+                            return false; // fail on first hit
+                    } else return false;
+                } else return false;
             }
-        }
 
         return true;
     }

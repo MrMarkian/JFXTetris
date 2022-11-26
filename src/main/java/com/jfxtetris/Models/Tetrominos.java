@@ -15,41 +15,36 @@ public class Tetrominos {
 
         shapes.add( "...x" +
                     "...x" +
-                    "...x" +
+                    "...x" + //I PIECE
                     "...x");
 
         shapes.add( "..x." +
                     ".xx." +
-                    ".x.." +
+                    ".x.." + // Z PIECE
                     "....");
 
         shapes.add( ".xx." +
-                    ".xx." +
+                    ".xx." + //O PIECE
                     "...." +
                     "....");
 
         shapes.add( "..x." +
-                    "..x." +
+                    "..x." + // L PIECE
                     "..xx" +
                     "....");
 
         shapes.add( "..x." +
-                    "..x." +
+                    "..x." + // J PIECE
                     ".xx." +
                     "....");
 
         shapes.add( "..xx" +
-                    ".xx." +
-                    "...." +
-                    "....");
-
-        shapes.add( ".xx." +
-                    "..xx" +
+                    ".xx." + //  S PEICE
                     "...." +
                     "....");
 
         shapes.add( ".x.." +
-                    ".xx." +
+                    ".xx." + // T PIECE
                     ".x.." +
                     "....");
     }

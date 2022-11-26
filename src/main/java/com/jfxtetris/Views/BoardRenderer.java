@@ -5,23 +5,23 @@ import com.jfxtetris.Models.GameBoard;
 import com.jfxtetris.Models.Tetrominos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 
 public class BoardRenderer {
 
-    final GameBoard pFieldToRender;
+
     int RenderSize = 40;
     int padding = 0;
     int[] DoubleBuffer;
     Tetrominos pieces = new Tetrominos();
+    GameManager gm;
 
-    public BoardRenderer(GameBoard board){
-        pFieldToRender = board;
-        DoubleBuffer = pFieldToRender.GetBoard().clone();
+
+    public BoardRenderer(GameManager gameManager){
+
+        gm = gameManager;
+        DoubleBuffer = gm.getGameBoard().GetBoard().clone();
+
         RefreshBuffer();
     }
 
@@ -38,22 +38,27 @@ public class BoardRenderer {
     }
 
     private void RefreshBuffer(){
-        DoubleBuffer = pFieldToRender.GetBoard().clone();
+        DoubleBuffer = gm.getGameBoard().GetBoard().clone();
     }
 
-    public Pane RenderBoardToPane(GameManager.CurrentPiece player){
+    public Pane RenderBoardToPane(GameBoard.CurrentPiece player){
+
+
         RefreshBuffer();
 
         Pane graphicsContext = new Pane();
-        graphicsContext.setBackground(Background.fill(Color.BLUEVIOLET));
+        if(player == null)
+            return graphicsContext;
+
+        graphicsContext.setBackground(Background.fill(gm.getMediaManager().GetCurrentTheme().getPadding()));
         int xPos=0, yPos =0, currentSquare =0;
         int TopOffset = 0, LeftOffset = 0;
 
         for(int px = 0; px < 4; px++){ //render player overlayed into double buffer
             for(int py=0; py < 4; py++){
 
-                if(Tetrominos.shapes.get(player.PieceType).charAt(pFieldToRender.Rotate(px,py, player.Rotation)) == 'x'){
-                    DoubleBuffer[(player.YPos + py) * pFieldToRender.GetBoardWidth() + (player.XPos + px)] = player.PieceType;
+                if(Tetrominos.shapes.get(player.PieceType).charAt(gm.getGameBoard().Rotate(px,py, player.Rotation)) == 'x'){
+                    DoubleBuffer[(player.YPos + py) * gm.getGameBoard().GetBoardWidth() + (player.XPos + px)] = player.PieceType;
                 }
             }
         }
@@ -63,51 +68,42 @@ public class BoardRenderer {
 
             switch (grid){
                 case 0:{
-                    r.setFill(Color.BLUEVIOLET);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getEmptySpace());
                     break;
                 }
                 case 1:{
-                    r.setFill(Color.RED);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getIPiece());
                     break;
                 }
                 case 2:{
-                    r.setFill(Color.CYAN);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getZPiece());
                 }
                 case 3:{
-                    r.setFill(Color.BLUE);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getOPiece());
                     break;
                 }
                 case 4:{
-                    r.setFill(Color.GREEN);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getLPiece());
                     break;
                 }
                 case 5:{
-                    r.setFill(Color.PINK);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getJPiece());
                     break;
                 }
                 case 6:{
-                    r.setFill(Color.YELLOWGREEN);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getSPiece());
                     break;
                 }
                 case 7:{
-                    r.setFill(Color.MAGENTA);
-                    break;
-                }
-                case 8:{
-                    r.setFill(Color.ORANGE);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getTPiece());
                     break;
                 }
                 case -1:{
-                    Stop[] newstop = {new Stop(0.5, Color.RED),
-                    new Stop(0.5, Color.GREEN),
-                    new Stop(1, Color.BLUE)};
-                    LinearGradient newgradient = new LinearGradient(0, 0,
-                            1, 0, true, CycleMethod.NO_CYCLE, newstop);
-                    r.setFill(newgradient);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getDestroyedPiece());
                     break;
                 }
                 case 9:{
-                    r.setFill(Color.BLACK);
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getBoarder());
                     break;
                 }
 
@@ -117,7 +113,7 @@ public class BoardRenderer {
             currentSquare ++;
             xPos += RenderSize + padding;
 
-            if(currentSquare % pFieldToRender.GetBoardWidth() == 0){
+            if(currentSquare % gm.getGameBoard().GetBoardWidth() == 0){
                 yPos += RenderSize + padding;
                 xPos = 0;
             }

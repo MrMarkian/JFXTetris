@@ -1,17 +1,27 @@
 package com.jfxtetris.Models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameBoard {
+public class GameBoard implements Serializable {
 
     int BoardWidth = 10;
     int BoardHeight = 24;
     int[] playField; //Maybe change this datatype
-
+    public List<Integer> pieceHistory = new ArrayList<>();
     public List<Integer> vLines = new ArrayList<>();
-    //--Constructors
+    public int totalGameTicks = 0;
+    public int numberOfNextPieces=1;
+    public int playerLevel = 0;
+    public boolean forceDown = false;
+    public boolean gameOver = false;
+    public int gameScore = 0;
+    public int totalLines = 0;
 
+    //--Constructors
+    public PieceRandomizer pieceRandomizer = new PieceRandomizer(PieceRandomizer.GameModeRND.TGM);
+    public CurrentPiece player1 = new CurrentPiece();
     public GameBoard(){
         boardInit();
     }
@@ -24,6 +34,13 @@ public class GameBoard {
                 playField[y * BoardWidth + x] =(x == 0 || x == BoardWidth - 1 || y == BoardHeight - 1) ? 9 : 0;
             }
         }
+    }
+
+    public class CurrentPiece implements Serializable{
+        public int PieceType = pieceRandomizer.GetNextPiece();
+        public int Rotation = 0;
+        public int XPos = GetBoardWidth() / 2;
+        public int YPos = 0;
     }
 
     //--Getter/Setter
@@ -63,10 +80,6 @@ public class GameBoard {
                 // Get index into field
                 int fi = (nPosY + py) * BoardWidth + (nPosX + px);
 
-                // Check that test is in bounds. Note out of bounds does
-                // not necessarily mean a fail, as the long vertical piece
-                // can have cells that lie outside the boundary, so we'll
-                // just ignore them
                 if (nPosX + px >= 0 && (nPosX + px < BoardWidth))
                 {
                     if (nPosY + py >= 0 && nPosY + py < BoardHeight)

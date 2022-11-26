@@ -16,6 +16,9 @@ public class MediaManager {
     private final List<AudioClip> voiceNumbers = new ArrayList<>();
     private final List<File> backgroundSongs = new ArrayList<>();
 
+    private final List<ThemeSet> themes = new ArrayList<>();
+    private int themeInUse =0;
+
     public MediaManager() {
         try {
             this.sequencer =MidiSystem.getSequencer();
@@ -56,6 +59,12 @@ public class MediaManager {
         backgroundSongs.add(new File("src/main/resources/Midi/22.mid"));
         backgroundSongs.add(new File("src/main/resources/Midi/23.mid"));
 
+        themes.add(new ThemeSet());
+
+    }
+
+    public ThemeSet GetCurrentTheme(){
+        return themes.get(themeInUse);
     }
 
     private AudioClip LoadClip(String path){
@@ -73,10 +82,6 @@ public class MediaManager {
 
     public void StartBackgroundMusic(){
        PlayMidi(0);
-    }
-
-    public void OnUpdate(){
-
     }
 
     public void PlayNext(){
@@ -110,12 +115,9 @@ public class MediaManager {
             sequencer.start();
             currentBackgroundSong = tuneIndex;
 
-            sequencer.addMetaEventListener(new MetaEventListener() {
-                @Override
-                public void meta(MetaMessage meta) {
-                    if(meta.getType() == 47){
-                        PlayNext();
-                    }
+            sequencer.addMetaEventListener(meta -> {
+                if(meta.getType() == 47){
+                    PlayNext();
                 }
             });
 
@@ -125,8 +127,10 @@ public class MediaManager {
     }
 
     public void OnClose(){
-        sequencer.stop();
-        sequencer.close();
+        if(sequencer.isRunning()) {
+            sequencer.stop();
+            sequencer.close();
+        }
     }
 
 }

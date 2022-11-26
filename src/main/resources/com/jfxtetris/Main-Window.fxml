@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -8,7 +9,11 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -19,22 +24,25 @@
                 <Menu mnemonicParsing="false" text="File">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#StartNewGame" text="New Game" />
+                  <MenuItem mnemonicParsing="false" onAction="#LoadGameClick" text="Load Game" />
+                  <MenuItem mnemonicParsing="false" onAction="#SaveGameClick" text="Save Game" />
                         <MenuItem mnemonicParsing="false" text="Close" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#PlayNextTune" text="PLay Next" />
+                  <MenuItem mnemonicParsing="false" onAction="#LevelUp" text="LevelUP" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem mnemonicParsing="false" onAction="#TestNextPiece" text="About" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <SplitPane dividerPositions="0.29797979797979796" VBox.vgrow="ALWAYS">
+        <SplitPane dividerPositions="0.39464882943143814" VBox.vgrow="ALWAYS">
             <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                     <children>
@@ -50,25 +58,55 @@
                                         <Font name="System Bold" size="24.0" />
                                     </font>
                                 </Label>
+                        <Label fx:id="LevelLabel" text="LEVEL:">
+                           <font>
+                              <Font name="System Bold" size="24.0" />
+                           </font>
+                        </Label>
                                 <Label fx:id="StatsLabel" text="STATS:">
                                     <font>
                                         <Font name="System Bold" size="24.0" />
                                     </font>
                                 </Label>
-                                <TitledPane focusTraversable="false" prefHeight="121.0" prefWidth="175.0" text="Board Control">
+                        <GridPane fx:id="StatsGrid">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
+                                <TitledPane focusTraversable="false" prefHeight="146.0" prefWidth="233.0" text="Board Control">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="173.0">
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="133.0" prefWidth="231.0">
                                             <children>
-                                                <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <VBox layoutX="19.6" layoutY="19.6" prefHeight="108.0" prefWidth="212.0" AnchorPane.bottomAnchor="-23.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="9.0" AnchorPane.topAnchor="0.0">
                                                     <children>
-                                                        <Slider fx:id="GridSizeSlider" blockIncrement="5.0" focusTraversable="false" max="101.0" min="1.0" minorTickCount="5" onMouseReleased="#SetGridSize" showTickLabels="true" showTickMarks="true" value="20.0" />
-                                                        <Slider fx:id="PaddingSlider" focusTraversable="false" minorTickCount="5" onMouseReleased="#SetGridSize" showTickLabels="true" showTickMarks="true" />
+                                                        <Slider fx:id="GridSizeSlider" blockIncrement="5.0" focusTraversable="false" minorTickCount="5" onMouseReleased="#SetGridSize" showTickLabels="true" showTickMarks="true" value="20.0" />
+                                                        <Slider fx:id="PaddingSlider" focusTraversable="false" majorTickUnit="5.0" max="15.0" minorTickCount="2" onMouseReleased="#SetGridSize" showTickLabels="true" showTickMarks="true" />
+                                          <Slider fx:id="NextPiecesCount" blockIncrement="1.0" focusTraversable="false" majorTickUnit="2.0" max="5.0" minorTickCount="1" onMouseClicked="#SetGridSize" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
                                                     </children>
                                                 </VBox>
                                             </children>
                                         </AnchorPane>
                                     </content>
                                 </TitledPane>
+                        <TitledPane animated="false" focusTraversable="false" text="Next Piece">
+                          <content>
+                            <AnchorPane fx:id="RenderAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <HBox fx:id="NextPieceBox" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
                             </children>
                         </VBox>
                     </children>

@@ -77,6 +77,7 @@ public class BoardRenderer {
                 }
                 case 2:{
                     r.setFill(gm.getMediaManager().GetCurrentTheme().getZPiece());
+                    break;
                 }
                 case 3:{
                     r.setFill(gm.getMediaManager().GetCurrentTheme().getOPiece());
@@ -104,6 +105,10 @@ public class BoardRenderer {
                 }
                 case 9:{
                     r.setFill(gm.getMediaManager().GetCurrentTheme().getBoarder());
+                    break;
+                }
+                default:{
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getEmptySpace());
                     break;
                 }
 

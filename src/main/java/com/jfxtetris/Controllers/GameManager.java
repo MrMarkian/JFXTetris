@@ -168,8 +168,11 @@ public class GameManager {
                                       gameBoard.GetBoard()[(gameBoard.player1.YPos + py) * gameBoard.GetBoardWidth() + px] = -1;
                                   }
                                 gameBoard.vLines.add(gameBoard.player1.YPos + py);
-                                if(gameBoard.totalLines %10 == 0 && gameBoard.totalLines > 0)
-                                    LevelUp();
+                                for (int a=1; a <= gameBoard.vLines.size(); a++){
+                                    if(gameBoard.totalLines %(a+9) == 0 && gameBoard.totalLines > 0)
+                                        LevelUp();
+                                }
+
                               }
 
                         }

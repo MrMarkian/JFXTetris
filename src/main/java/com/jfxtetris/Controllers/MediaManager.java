@@ -1,5 +1,8 @@
 package com.jfxtetris.Controllers;
+import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 
 import javax.sound.midi.*;
 import java.io.*;
@@ -17,7 +20,8 @@ public class MediaManager {
     private final List<File> backgroundSongs = new ArrayList<>();
 
     private final List<ThemeSet> themes = new ArrayList<>();
-    private int themeInUse =0;
+    private int themeInUse =1;
+    private int setsToLoad = 2;
 
     public MediaManager() {
         try {
@@ -61,6 +65,24 @@ public class MediaManager {
 
         themes.add(new ThemeSet());
 
+
+        themes.add(LoadImageSet(1));
+
+    }
+
+    private ThemeSet LoadImageSet(int count){
+        return
+                new ThemeSet(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/I.png")).toString())),
+                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set"+ count + "/O.png")).toString())),
+                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/T.png")).toString())),
+                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/J.png")).toString())),
+                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/L.png")).toString())),
+                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/S.png")).toString())),
+                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/Z.png")).toString())),
+                        Color.WHITE,
+                        Color.GRAY,
+                        Color.FIREBRICK,
+                        Color.BLACK);
     }
 
     public ThemeSet GetCurrentTheme(){

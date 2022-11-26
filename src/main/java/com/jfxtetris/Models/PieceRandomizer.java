@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PieceRandomizer implements Serializable {
     GameModeRND modeRND;
-    int bagSize = 14;
+    int bagSize = 7;
     List<Integer> piecebag = new ArrayList<>();
 
 

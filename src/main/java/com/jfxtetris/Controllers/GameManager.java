@@ -9,10 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequencer;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.util.*;
@@ -24,10 +20,9 @@ import javafx.scene.media.AudioClip;
 public class GameManager {
     GameBoard gameBoard = new GameBoard();
     BoardRenderer boardRenderer = new BoardRenderer(gameBoard);
-    MainWindowController mainUI;
+    MediaManager media = new MediaManager();
 
     Pane RenderPane;
-    Label scoreLabel;
     VBox outputBox;
 
     Timer FPSTimer = new Timer();
@@ -46,7 +41,7 @@ public class GameManager {
     CurrentPiece player1 = new CurrentPiece();
     boolean gameOver = false;
 
-    Sequencer sequencer;
+
 
     int gameScore = 0;
     int totalLines = 0;
@@ -61,13 +56,13 @@ public class GameManager {
 
 
 
-    public GameManager(Pane renderPane, VBox out) throws MidiUnavailableException {
+    public GameManager(Pane renderPane, VBox out) throws URISyntaxException {
         RenderPane = renderPane;
         input = new InputHandler(RenderPane.getScene());
         outputBox = out;
     }
 
-    public void StartNewGame() throws MidiUnavailableException, InvalidMidiDataException, IOException, URISyntaxException {
+    public void StartNewGame() throws Exception {
             //process input
             pieceHistory.add(player1.PieceType);
             InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,INPUTdelay + 10L);
@@ -75,18 +70,7 @@ public class GameManager {
             LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, lOGICdelay + 10L);
             //Game Timing & Rendering
             FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, FPSdelay * 100L);
-        try {
-            sequencer = MidiSystem.getSequencer();
-        } catch (MidiUnavailableException e) {
-            throw new RuntimeException(e);
-        }
-        //Todo: Create a media controller class
-
-        sequencer.open();
-        InputStream is = new BufferedInputStream(new FileInputStream(new File("C:\\GIT\\JFXTetris\\src\\main\\resources\\Midi\\Tetris - A Theme.mid")));
-        sequencer.setSequence(is);
-        sequencer.start();
-
+            media.StartBackgroundMusic();
     }
 
     private void RunInputs(){
@@ -129,9 +113,7 @@ public class GameManager {
     }
 
     private void UpdateBackgroundMusic() {
-        if(sequencer.getTickLength() == sequencer.getTickPosition()){
 
-        }
 
     }
 
@@ -139,12 +121,9 @@ public class GameManager {
 
         @Override
         public void run() {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    RunInputs();
-                    CheckTimers();
-                }
+            Platform.runLater(() -> {
+                RunInputs();
+                CheckTimers();
             });
         }
     }
@@ -159,6 +138,11 @@ public class GameManager {
             LogicTimer.purge();
         }
     }
+    private void CheckTimers(boolean forceShutdown){
+        gameOver = forceShutdown;
+        CheckTimers();
+    }
+
 
     private class OnTimerLogicUpdate extends TimerTask{
 
@@ -249,34 +233,24 @@ public class GameManager {
 
                    switch (gameBoard.vLines.size()) {
                        case 1 -> {
-                           String path = "src/main/resources/Voice/1.wav";
-                           AudioClip media = new AudioClip(new File(path).toURI().toString());
-                           media.play();
+                           media.PlayVoice(1);
                            break;
 
                        }
                        case 2 -> {
-                           String path = "src/main/resources/Voice/2.wav";
-                           AudioClip media = new AudioClip(new File(path).toURI().toString());
-                           media.play();
+                           media.PlayVoice(2);
                            break;
                        }
                        case 3 -> {
-                           String path = "src/main/resources/Voice/3.wav";
-                           AudioClip media = new AudioClip(new File(path).toURI().toString());
-                           media.play();
+                            media.PlayVoice(3);
                            break;
                        }
                        case 4 -> {
-                           String path = "src/main/resources/Voice/4.wav";
-                           AudioClip media = new AudioClip(new File(path).toURI().toString());
-                           media.play();
+                           media.PlayVoice(4);
                            break;
                        }
                        case 5 -> {
-                           String path = "src/main/resources/Voice/5.wav";
-                           AudioClip media = new AudioClip(new File(path).toURI().toString());
-                           media.play();
+                           media.PlayVoice(5);
                            break;
                        }
                        default -> {
@@ -295,10 +269,10 @@ public class GameManager {
         for (Node n:outputBox.getChildren()) {
             if(n.getId() == null)
                 continue;
-           if(n.getId().toString().equals("ScoreLabel")){
+           if(n.getId().equals("ScoreLabel")){
                ((Label)n).setText("SCORE: " + gameScore);
            }
-           if(n.getId().toString().equals("TotalLinesLabel")){
+           if(n.getId().equals("TotalLinesLabel")){
                 ((Label)n).setText("TOTAL LINES: " + totalLines);
            }
 
@@ -310,9 +284,14 @@ public class GameManager {
 
     }
 
+    public void RequestShutdown(){
+        media.OnClose();
+        CheckTimers(true);
+    }
+
     private String GenerateStats(){
 
-        int tetrinomoStats[] = new int[9];
+        int[] tetrinomoStats = new int[9];
 
 
         if(!pieceHistory.isEmpty()){

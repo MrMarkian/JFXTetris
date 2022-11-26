@@ -5,8 +5,8 @@ import java.util.List;
 
 public class GameBoard {
 
-    int BoardWidth = 12;
-    int BoardHeight = 18;
+    int BoardWidth = 10;
+    int BoardHeight = 24;
     int[] playField; //Maybe change this datatype
 
     public List<Integer> vLines = new ArrayList<>();
@@ -15,18 +15,9 @@ public class GameBoard {
     public GameBoard(){
         boardInit();
     }
-    public GameBoard(int width, int height){
-        BoardHeight = height;
-        BoardWidth = width;
-        boardInit();
-    }
 
     private void boardInit(){
-        playField = new int [BoardWidth * BoardHeight];
-
-        for (int grid:playField) {
-            grid = 0;
-        }
+        playField = new int [BoardWidth * BoardHeight] ;
 
         for(int x=0; x< BoardWidth; x++){
             for(int y = 0; y < BoardHeight; y++){
@@ -40,10 +31,6 @@ public class GameBoard {
         return playField;
     }
 
-    public void SetBoard(){
-
-    }
-
     public int GetBoardWidth(){
         return BoardWidth;
     }
@@ -55,18 +42,13 @@ public class GameBoard {
     //----- Methods
 
     public int Rotate(int px, int py, int r){
-        switch (r % 4) {
-            case 0:
-                return py * 4 + px;
-            case 1:
-                return 12 + py - (px * 4);
-            case 2:
-                return 15 - (py * 4) - px;
-            case 3:
-                return 3 - py + (px * 4);
-            default:
-                return -1;
-          }
+        return switch (r % 4) {
+            case 0 -> py * 4 + px;
+            case 1 -> 12 + py - (px * 4);
+            case 2 -> 15 - (py * 4) - px;
+            case 3 -> 3 - py + (px * 4);
+            default -> -1;
+        };
 
     }
 

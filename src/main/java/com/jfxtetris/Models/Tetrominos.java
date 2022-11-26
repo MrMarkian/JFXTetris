@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tetrominos {
-    public static List<String> shapes = new ArrayList<>();
+    public static final List<String> shapes = new ArrayList<>();
 
     public Tetrominos(){
 

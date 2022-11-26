@@ -13,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 
 public class BoardRenderer {
 
-    GameBoard pFieldToRender;
+    final GameBoard pFieldToRender;
     int RenderSize = 40;
     int padding = 0;
     int[] DoubleBuffer;

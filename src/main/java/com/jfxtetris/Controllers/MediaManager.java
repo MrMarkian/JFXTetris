@@ -20,7 +20,7 @@ public class MediaManager {
     private final List<File> backgroundSongs = new ArrayList<>();
 
     private final List<ThemeSet> themes = new ArrayList<>();
-    private int themeInUse =1;
+    private int themeInUse =2;
     private int setsToLoad = 2;
 
     public MediaManager() {
@@ -67,6 +67,7 @@ public class MediaManager {
 
 
         themes.add(LoadImageSet(1));
+        themes.add(LoadImageSet(2));
 
     }
 
@@ -79,10 +80,10 @@ public class MediaManager {
                         new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/L.png")).toString())),
                         new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/S.png")).toString())),
                         new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/Z.png")).toString())),
-                        Color.WHITE,
-                        Color.GRAY,
+                        Color.DARKGREEN,
+                        Color.DARKGREEN,
                         Color.FIREBRICK,
-                        Color.BLACK);
+                        Color.LIGHTGREEN);
     }
 
     public ThemeSet GetCurrentTheme(){

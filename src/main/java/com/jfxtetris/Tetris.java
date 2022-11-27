@@ -11,7 +11,7 @@ public class Tetris extends Application {
 
 
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Tetris.class.getResource("Main-Window.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Tetris.class.getResource("/Main-Window.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 700, 900);
         stage.setTitle("Tetris!");
         stage.setScene(scene);

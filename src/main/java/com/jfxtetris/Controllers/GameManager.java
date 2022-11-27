@@ -29,9 +29,7 @@ public class GameManager {
     Timer FPSTimer;
     Timer LogicTimer;
     Timer InputTimer;
-    long FPSdelay =1;
-    long lOGICdelay = 2;
-    long INPUTdelay = 3;
+
 
     InputHandler input ;
 
@@ -46,13 +44,13 @@ public class GameManager {
     public void StartNewGame() {
             //process input
             InputTimer = new Timer();
-            InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,INPUTdelay + 10L);
+            InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,gameBoard.INPUTdelay + 10L);
             //Game Logic
             LogicTimer = new Timer();
-            LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, lOGICdelay + 10L);
+            LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, gameBoard.lOGICdelay + 10L);
             //Game Timing & Rendering
             FPSTimer = new Timer();
-            FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, FPSdelay * 10L);
+            FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.FPSdelay * 10L);
             media.StartBackgroundMusic();
     }
 
@@ -168,10 +166,8 @@ public class GameManager {
                                       gameBoard.GetBoard()[(gameBoard.player1.YPos + py) * gameBoard.GetBoardWidth() + px] = -1;
                                   }
                                 gameBoard.vLines.add(gameBoard.player1.YPos + py);
-                                for (int a=1; a <= gameBoard.vLines.size(); a++){
-                                    if(gameBoard.totalLines %(a+9) == 0 && gameBoard.totalLines > 0)
-                                        LevelUp();
-                                }
+
+                                    gameBoard.playerLevel = (int) gameBoard.totalLines / 10;
 
                               }
 

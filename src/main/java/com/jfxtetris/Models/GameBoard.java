@@ -19,6 +19,10 @@ public class GameBoard implements Serializable {
     public int gameScore = 0;
     public int totalLines = 0;
 
+    public long FPSdelay =1;
+    public long lOGICdelay = 2;
+    public long INPUTdelay = 3;
+
     //--Constructors
     public PieceRandomizer pieceRandomizer = new PieceRandomizer(PieceRandomizer.GameModeRND.TGM);
     public CurrentPiece player1 = new CurrentPiece();

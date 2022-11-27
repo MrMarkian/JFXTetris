@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jfxtetris.Controllers.NewGameWindowController">
+   <children>
+      <TextField layoutX="37.0" layoutY="83.0" prefHeight="25.0" prefWidth="263.0" promptText="Name.." />
+      <Label layoutX="210.0" layoutY="14.0" prefHeight="45.0" prefWidth="136.0" text="New Game">
+         <font>
+            <Font name="Agency FB Bold" size="37.0" />
+         </font>
+      </Label>
+      <Accordion layoutX="312.0" layoutY="83.0" prefHeight="244.0" prefWidth="274.0">
+         <panes>
+            <TitledPane alignment="TOP_LEFT" animated="false" contentDisplay="RIGHT" prefHeight="120.0" prefWidth="263.0" text="Piece Randomiser">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="24.0" layoutY="135.0" text="Bag Size:" />
+                        <Spinner layoutX="80.0" layoutY="131.0" prefHeight="25.0" prefWidth="175.0" />
+                        <CheckBox layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Skip S, Z, O on first piece" />
+                        <RadioButton layoutX="16.0" layoutY="48.0" mnemonicParsing="false" selected="true" text="Start with no history">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="History" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton layoutX="16.0" layoutY="80.0" mnemonicParsing="false" text="TGM1 ( Z, Z, Z, Z)" toggleGroup="$History" />
+                        <RadioButton layoutX="16.0" layoutY="106.0" mnemonicParsing="false" text="TGM2 (Z, S, S, Z)" toggleGroup="$History" />
+                     </children>
+                  </AnchorPane>
+              </content>
+               <graphic>
+                  <ComboBox prefWidth="150.0" />
+               </graphic>
+            </TitledPane>
+            <TitledPane alignment="TOP_RIGHT" contentDisplay="RIGHT" prefHeight="110.0" prefWidth="179.0" text="Scoring" wrapText="true">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+               <graphic>
+                  <ComboBox prefWidth="196.0" promptText="Scoring Preset" />
+               </graphic>
+            </TitledPane>
+            <TitledPane animated="false" text="Timings">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </TitledPane>
+            <TitledPane animated="false" text="Sounds &amp; Music">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </TitledPane>
+         </panes>
+      </Accordion>
+      <CheckBox layoutX="55.0" layoutY="212.0" mnemonicParsing="false" selected="true" text="Timed Game" />
+      <CheckBox layoutX="55.0" layoutY="241.0" mnemonicParsing="false" selected="true" text="Allow high score save" />
+      <CheckBox layoutX="55.0" layoutY="267.0" mnemonicParsing="false" text="Render above top border" />
+      <CheckBox layoutX="55.0" layoutY="289.0" mnemonicParsing="false" text="Show ghost piece" />
+      <CheckBox layoutX="55.0" layoutY="319.0" mnemonicParsing="false" text="Allow Wall kicks" />
+      <ComboBox layoutX="121.0" layoutY="122.0" prefHeight="25.0" prefWidth="179.0" promptText="Game Mode" />
+      <Label layoutX="37.0" layoutY="126.0" text="Game Mode" />
+   </children>
+</AnchorPane>

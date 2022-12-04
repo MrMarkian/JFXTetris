@@ -33,6 +33,8 @@
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#PlayNextTune" text="PLay Next" />
                   <MenuItem mnemonicParsing="false" onAction="#LevelUp" text="LevelUP" />
+                  <MenuItem mnemonicParsing="false" onAction="#SwitchtoNextTheme" text="Next Theme" />
+                  <MenuItem mnemonicParsing="false" onAction="#showThemeManager" text="Show Theme Manager" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

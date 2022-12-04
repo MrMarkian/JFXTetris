@@ -1,6 +1,8 @@
 package com.jfxtetris.Controllers;
 
 import com.jfxtetris.Models.GameBoard;
+import com.jfxtetris.Models.GameSettings;
+import com.jfxtetris.Models.SoundTypes;
 import com.jfxtetris.Models.Tetrominos;
 import com.jfxtetris.Views.BoardRenderer;
 import com.jfxtetris.Views.TetrinomoRenderer;
@@ -16,8 +18,8 @@ import javafx.scene.text.FontWeight;
 
 
 public class GameManager {
-    GameBoard gameBoard = new GameBoard();
-    BoardRenderer boardRenderer = new BoardRenderer(this);
+    GameBoard gameBoard;
+    BoardRenderer boardRenderer;
     MediaManager media = new MediaManager();
     TetrinomoRenderer tetrinomoRenderer = new TetrinomoRenderer();
 
@@ -32,73 +34,123 @@ public class GameManager {
 
 
     InputHandler input ;
+    private boolean hardDrop;
+    private int hardDropLines =0;
 
-    public GameManager(Pane renderPane, VBox out, HBox nextPiece, GridPane StatsGrid) throws URISyntaxException {
+    public GameManager(GameSettings settings, Pane renderPane, VBox out, HBox nextPiece, GridPane StatsGrid) throws URISyntaxException {
         RenderPane = renderPane;
         input = new InputHandler(RenderPane.getScene());
         outputBox = out;
         nextPieceRender = nextPiece;
         stats = StatsGrid;
+        gameBoard = new GameBoard(settings);
+        boardRenderer =  new BoardRenderer(this);
     }
+
+    //Todo: Add Line Limit Mode
+    //Todo: Add limited time mode
+    //Todo: Add garbage mode
+    //Todo: Add Premade levels
+    //Todo: Adjustable game timings
 
     public void StartNewGame() {
             //process input
+
             InputTimer = new Timer();
-            InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,gameBoard.INPUTdelay + 10L);
+            InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,gameBoard.INPUTdelay);
             //Game Logic
             LogicTimer = new Timer();
-            LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, gameBoard.lOGICdelay + 10L);
+            LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, gameBoard.lOGICdelay);
             //Game Timing & Rendering
             FPSTimer = new Timer();
-            FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.FPSdelay * 10L);
-            media.StartBackgroundMusic();
+            FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.FPSdelay);
+            if(gameBoard.settings.playBackGroundMusic)
+             media.StartBackgroundMusic();
     }
+
+
+    //Todo: Allow Wall Kicks
+    //Todo: Show ghost piece
+    //Todo: Render above top border (adjustable)
 
     private void RunInputs(){
         UpdateBackgroundMusic();
 
-        if(gameBoard.player1 == null)
+        if(gameBoard.fallingPiece == null || hardDrop)
             return;
 
-        if(input.leftPressed.get()){ //LEFT KEY
-            if(gameBoard.DoesPieceFit(gameBoard.player1.PieceType, gameBoard.player1.Rotation, gameBoard.player1.XPos -1, gameBoard.player1.YPos)){
-                gameBoard.player1.XPos --;
-                input.leftPressed.set(false);
-                UpdateBoards();
+        if(input.leftPressed.get() || input.rightPressed.get())
+            if(gameBoard.settings.playSoundEffects)
+                media.PlaySoundClip(SoundTypes.MoveSound);
 
+        if(input.leftPressed.get()){
+
+
+            //LEFT KEY
+            if(gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation, gameBoard.fallingPiece.XPos -1, gameBoard.fallingPiece.YPos)){
+                gameBoard.fallingPiece.XPos --;
+                input.leftPressed.set(false);
+              //  UpdateBoards();
             }
         }
 
         if(input.rightPressed.get()){ //RIGHT KEY
-            if(gameBoard.DoesPieceFit(gameBoard.player1.PieceType, gameBoard.player1.Rotation, gameBoard.player1.XPos + 1, gameBoard.player1.YPos)){
-                gameBoard.player1.XPos ++;
+            if(gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation, gameBoard.fallingPiece.XPos + 1, gameBoard.fallingPiece.YPos)){
+                gameBoard.fallingPiece.XPos ++;
                 input.rightPressed.set(false);
-                UpdateBoards();
+              //  UpdateBoards();
             }
         }
 
         if(input.downPressed.get()){
-            if(gameBoard.DoesPieceFit(gameBoard.player1.PieceType, gameBoard.player1.Rotation, gameBoard.player1.XPos, gameBoard.player1.YPos + 1)){
-                gameBoard.player1.YPos++;
+            if(gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation, gameBoard.fallingPiece.XPos, gameBoard.fallingPiece.YPos + 1)){
+                gameBoard.fallingPiece.YPos++;
                 //input.downPressed.set(false);
-                UpdateBoards();
+                if(gameBoard.settings.playSoundEffects)
+                    media.PlaySoundClip(SoundTypes.SoftDrop);
+              //  UpdateBoards();
             }
         }
 
+        if(input.upPressed.get()){
 
-        if(input.spacePressed.get() || input.upPressed.get()){
-            if(gameBoard.DoesPieceFit(gameBoard.player1.PieceType, gameBoard.player1.Rotation + 1, gameBoard.player1.XPos, gameBoard.player1.YPos)){
-                gameBoard.player1.Rotation ++;
+            if(gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation + 1, gameBoard.fallingPiece.XPos, gameBoard.fallingPiece.YPos)){
+                gameBoard.fallingPiece.Rotation ++;
                 input.spacePressed.set(false);
                 input.upPressed.set(false);
-                UpdateBoards();
+                if(gameBoard.settings.playSoundEffects)
+                    media.PlaySoundClip(SoundTypes.SpinSound);
+              //  UpdateBoards();
+            } else if (gameBoard.settings.allowWallKicks && gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation + 1, gameBoard.fallingPiece.XPos + 1, gameBoard.fallingPiece.YPos) ) { //wallkick
+
+                gameBoard.fallingPiece.Rotation ++;
+                gameBoard.fallingPiece.XPos ++;
+                input.spacePressed.set(false);
+                input.upPressed.set(false);
+                if(gameBoard.settings.playSoundEffects)
+                    media.PlaySoundClip(SoundTypes.SpinSound);
+               // UpdateBoards();
+
+            } else if (gameBoard.settings.allowWallKicks && gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation + 1, gameBoard.fallingPiece.XPos - 1, gameBoard.fallingPiece.YPos)) {
+                gameBoard.fallingPiece.Rotation ++;
+                gameBoard.fallingPiece.XPos --;
+                input.spacePressed.set(false);
+                input.upPressed.set(false);
+                if(gameBoard.settings.playSoundEffects)
+                    media.PlaySoundClip(SoundTypes.SpinSound);
+              //  UpdateBoards();
             }
         }
+
+        if(input.spacePressed.get()){ //Hard Drop
+            hardDrop = true;
+            if(gameBoard.settings.playSoundEffects)
+                media.PlaySoundClip(SoundTypes.HardDrop);
+        }
+       // UpdateBoards();
     }
 
     private void UpdateBackgroundMusic() {
-
-
     }
 
     private class OnTimerInputUpdate extends TimerTask{
@@ -136,16 +188,25 @@ public class GameManager {
                 return;
 
             if(gameBoard.forceDown){
-                if(gameBoard.DoesPieceFit(gameBoard.player1.PieceType, gameBoard.player1.Rotation, gameBoard.player1.XPos, gameBoard.player1.YPos+1)){
-                    gameBoard.player1.YPos++;
-                    gameBoard.forceDown = false;
+                if(gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation, gameBoard.fallingPiece.XPos, gameBoard.fallingPiece.YPos+1)){
+                    gameBoard.fallingPiece.YPos++;
+                    if(hardDrop){
+                        gameBoard.forceDown = true;
+                        hardDropLines ++;
+                    }
+                    else
+                        gameBoard.forceDown = false;
                 }else{ //end turn
                     // - lock the playfield
+                    hardDrop = false;
+                    System.out.println("Hard Drop Lines:" + hardDropLines);
+                    gameBoard.player.Score += (hardDropLines * 10);
+                    hardDropLines = 0;
 
                     for(int px = 0; px < 4; px++){
                         for(int py = 0; py < 4; py++){
-                            if(Tetrominos.shapes.get(gameBoard.player1.PieceType).charAt(gameBoard.Rotate(px,py, gameBoard.player1.Rotation)) == 'x'){
-                                gameBoard.GetBoard()[(gameBoard.player1.YPos + py) * gameBoard.GetBoardWidth() + (gameBoard.player1.XPos + px)] = gameBoard.player1.PieceType;
+                            if(Tetrominos.shapes.get(gameBoard.fallingPiece.PieceType).charAt(gameBoard.Rotate(px,py, gameBoard.fallingPiece.Rotation)) == 'x'){
+                                gameBoard.GetBoard()[(gameBoard.fallingPiece.YPos + py) * gameBoard.GetBoardWidth() + (gameBoard.fallingPiece.XPos + px)] = gameBoard.fallingPiece.PieceType;
                             }
                         }
 
@@ -154,35 +215,36 @@ public class GameManager {
                    //check for full lines
 
                     for (int py = 0; py < 4; py++){
-                        if(gameBoard.player1.YPos + py < gameBoard.GetBoardHeight() -1){
+                        if(gameBoard.fallingPiece.YPos + py < gameBoard.GetBoardHeight() -1){
                             boolean bLine = true;
                             for(int px = 1; px < gameBoard.GetBoardWidth() -1 ; px++) {
-                                bLine &= (gameBoard.GetBoard()[(gameBoard.player1.YPos + py) * gameBoard.GetBoardWidth() + px]) != 0;
+                                bLine &= (gameBoard.GetBoard()[(gameBoard.fallingPiece.YPos + py) * gameBoard.GetBoardWidth() + px]) != 0;
                             }
 
                             if(bLine){
 
                                for(int px = 1; px < gameBoard.GetBoardWidth() -1; px++){
-                                      gameBoard.GetBoard()[(gameBoard.player1.YPos + py) * gameBoard.GetBoardWidth() + px] = -1;
+                                      gameBoard.GetBoard()[(gameBoard.fallingPiece.YPos + py) * gameBoard.GetBoardWidth() + px] = -1;
                                   }
-                                gameBoard.vLines.add(gameBoard.player1.YPos + py);
-
-                                    gameBoard.playerLevel = (int) gameBoard.totalLines / 10;
-
+                                    gameBoard.vLines.add(gameBoard.fallingPiece.YPos + py);
+                                    gameBoard.player.Level = (int) gameBoard.totalLines / 10;
                               }
 
                         }
                     }
 
-                    // choose next piece
-                    gameBoard.pieceHistory.add(gameBoard.player1.PieceType);
-                    gameBoard.player1 = null;
-                    gameBoard.player1 = gameBoard.new CurrentPiece();
+                    // choose next piece                                                                                                                                                                                                                                                                                                                                                                                      8
+                    gameBoard.pieceHistory.add(gameBoard.fallingPiece.PieceType);
+                    gameBoard.fallingPiece = null;
+                    gameBoard.fallingPiece = gameBoard.new CurrentPiece();
                     input.downPressed.set(false);
 
-                    if(!gameBoard.DoesPieceFit(gameBoard.player1.PieceType, gameBoard.player1.Rotation, gameBoard.player1.XPos, gameBoard.player1.YPos)){
+                    if(!gameBoard.DoesPieceFit(gameBoard.fallingPiece.PieceType, gameBoard.fallingPiece.Rotation, gameBoard.fallingPiece.XPos, gameBoard.fallingPiece.YPos)){
                         MainWindowController.DisplayAlert("Game Over", "Game Over man.. ", "Game Over");
                         gameBoard.gameOver = true;
+                        media.StopBackgroundMusic();
+                        if(gameBoard.settings.playSoundEffects)
+                            media.PlaySoundClip(SoundTypes.GameOver);
                     }
 
 
@@ -197,24 +259,25 @@ public class GameManager {
 
        @Override
        public void run() {
-           if(gameBoard.gameOver)
+           if(gameBoard.gameOver){
+               UpdateBoards();
+
                return;
+           }
+
            gameBoard.totalGameTicks++;
 
            Platform.runLater(()->{
-               if(gameBoard.totalGameTicks % CalculateGameSpeedNES(gameBoard.playerLevel) == 0){
+               if(gameBoard.totalGameTicks % CalculateGameSpeedNES(gameBoard.player.Level) == 0){
                    gameBoard.forceDown = true;
                }
-
-
 
                UpdateBoards();
                UpdateUI();
 
-
                nextPieceRender.getChildren().clear();
                for(int a = 0; a < gameBoard.numberOfNextPieces; a++) {
-                   nextPieceRender.getChildren().add(tetrinomoRenderer.RenderTetrinomo(gameBoard.pieceRandomizer.PeekAt(a), 20, 3, media));
+                   nextPieceRender.getChildren().add(tetrinomoRenderer.RenderTetrinomo(gameBoard.settings.randomizer.PeekAt(a), 20, 3, media));
                }
 
                if(!gameBoard.vLines.isEmpty()){
@@ -226,22 +289,36 @@ public class GameManager {
                            }
                        }
                    }
-                   gameBoard.gameScore += (gameBoard.vLines.size() * 100);
+                   gameBoard.player.Score += (gameBoard.vLines.size() * 100) + (hardDropLines * 10);
                    gameBoard.totalLines += gameBoard.vLines.size();
 
 
                    switch (gameBoard.vLines.size()) {
-                       case 1 -> media.PlayVoice(1);
-                       case 2 -> media.PlayVoice(2);
-                       case 3 -> media.PlayVoice(3);
-                       case 4 -> media.PlayVoice(4);
-                       case 5 -> media.PlayVoice(5);
-                       default -> {
-
-                       }
+                       case 1:
+                           gameBoard.player.Score += 100 * gameBoard.player.Level;
+                           media.PlayVoice(1);
+                           break;
+                       case 2:
+                           gameBoard.player.Score += 300 * gameBoard.player.Level;
+                           media.PlayVoice(2);
+                           break;
+                       case 3:
+                           media.PlayVoice(3);
+                           break;
+                       case 4:
+                           media.PlayVoice(4);
+                           break;
+                       case 5:
+                           media.PlayVoice(5);
+                           break;
+                       default:
+                           break;
                    }
 
                    gameBoard.vLines.clear();
+
+                   hardDropLines = 0;
+
 
                }
            });
@@ -253,13 +330,13 @@ public class GameManager {
             if(n.getId() == null)
                 continue;
            if(n.getId().equals("ScoreLabel")){
-               ((Label)n).setText("SCORE: " + gameBoard.gameScore);
+               ((Label)n).setText("SCORE: " + gameBoard.player.Score);
            }
            if(n.getId().equals("TotalLinesLabel")){
                 ((Label)n).setText("TOTAL LINES: " + gameBoard.totalLines);
            }
             if(n.getId().equals("LevelLabel")){
-                ((Label)n).setText("LEVEL: " + gameBoard.playerLevel);
+                ((Label)n).setText("LEVEL: " + gameBoard.player.Level);
             }
         }
         RenderStatsGrid(stats);
@@ -295,8 +372,11 @@ public class GameManager {
 
 
     public void UpdateBoards(){
-        RenderPane.getChildren().clear();
-        RenderPane.getChildren().add(boardRenderer.RenderBoardToPane(gameBoard.player1));
+        Platform.runLater(() -> {
+            RenderPane.getChildren().clear();
+            RenderPane.getChildren().add(boardRenderer.RenderBoardToPane(gameBoard.fallingPiece));
+        });
+
     }
 
     public GameBoard getGameBoard(){
@@ -308,7 +388,7 @@ public class GameManager {
     }
 
     public void LevelUp(){
-        gameBoard.playerLevel++;
+        gameBoard.player.Level++;
     }
 
     private int CalculateGameSpeedNES(int level){

@@ -1,9 +1,11 @@
 package com.jfxtetris.Controllers;
 
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
 public class ThemeSet {
+    String ThemeName;
     Paint IPiece;
     Paint OPiece;
     Paint TPiece;
@@ -15,6 +17,15 @@ public class ThemeSet {
     Paint Padding;
     Paint DestroyedPiece;
     Paint EmptySpace;
+    Paint GhostPiece;
+    Paint GarbagePiece;
+
+    AudioClip MoveSound;
+    AudioClip SpinSound;
+    AudioClip HardDropSound;
+    AudioClip SoftDropSound;
+    AudioClip GameOverSound;
+
 
     public Paint getIPiece() {
         return IPiece;
@@ -85,6 +96,7 @@ public class ThemeSet {
         Padding = padding;
         DestroyedPiece = destroyed;
         EmptySpace = emptySpace;
+
     }
 
     public ThemeSet(){
@@ -99,5 +111,12 @@ public class ThemeSet {
        Padding = Color.GRAY;
        DestroyedPiece = Color.WHITESMOKE;
        EmptySpace = Color.BLACK;
+    }
+
+    @Override
+    public String toString() {
+        return "ThemeSet{" +
+                "ThemeName='" + ThemeName + '\'' +
+                '}';
     }
 }

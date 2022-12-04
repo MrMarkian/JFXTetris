@@ -14,11 +14,25 @@
         <junit.version>5.9.0</junit.version>
     </properties>
 
+    <repositories>
+    <repository>
+        <id>my-repo1</id>
+        <name>Maven Repo</name>
+        <url>https://repo1.maven.org/maven2/</url>
+    </repository>
+
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>19-ea+7</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.almasb</groupId>
+            <artifactId>fxgl</artifactId>
+            <version>17.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>

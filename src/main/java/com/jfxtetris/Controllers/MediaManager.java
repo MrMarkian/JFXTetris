@@ -1,4 +1,5 @@
 package com.jfxtetris.Controllers;
+import com.jfxtetris.Models.SoundTypes;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -6,7 +7,11 @@ import javafx.scene.paint.ImagePattern;
 
 import javax.sound.midi.*;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,13 +22,13 @@ public class MediaManager {
     private int currentBackgroundSong = 0;
 
     private final List<AudioClip> voiceNumbers = new ArrayList<>();
-    private final List<File> backgroundSongs = new ArrayList<>();
+    private final List<URI> backgroundSongs = new ArrayList<>();
 
     private final List<ThemeSet> themes = new ArrayList<>();
     private int themeInUse =2;
     private int setsToLoad = 2;
 
-    public MediaManager() {
+    public MediaManager() throws URISyntaxException {
         try {
             this.sequencer =MidiSystem.getSequencer();
         } catch (MidiUnavailableException e) {
@@ -36,32 +41,39 @@ public class MediaManager {
         voiceNumbers.add(LoadClip("/Voice/4.wav"));
         voiceNumbers.add(LoadClip("/Voice/5.wav"));
 
-        backgroundSongs.add(new File("src/main/resources/Midi/TetrisA.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/TetrisB.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/TetrisC.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/1.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/2.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/3.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/4.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/5.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/6.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/7.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/8.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/9.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/10.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/11.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/12.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/13.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/14.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/15.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/16.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/17.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/18.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/19.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/20.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/21.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/22.mid"));
-        backgroundSongs.add(new File("src/main/resources/Midi/23.mid"));
+        URI a = null;
+        a = Objects.requireNonNull(getClass().getResource("/Midi/TetrisA.mid")).toURI();
+
+        backgroundSongs.add(a);
+
+        //backgroundSongs.add(new File("src/main/resources/Midi/TetrisA.mid"));
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/TetrisB.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/TetrisC.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/1.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/2.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/3.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/4.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/5.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/6.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/7.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/8.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/9.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/10.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/11.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/12.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/13.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/14.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/15.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/16.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/17.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/18.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/19.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/20.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/21.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/22.mid")).toURI());
+        backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/23.mid")).toURI());
+
+
 
         themes.add(new ThemeSet());
 
@@ -69,7 +81,21 @@ public class MediaManager {
         themes.add(LoadImageSet(1));
         themes.add(LoadImageSet(2));
 
+        themes.get(2).MoveSound = LoadClip("/Sounds/Move.wav");
+        themes.get(2).GameOverSound = LoadClip("/Sounds/game-over-yeah.mp3");
+        themes.get(2).SoftDropSound = LoadClip("/Sounds/SoftDrop.wav");
+        themes.get(2).SpinSound = LoadClip("/Sounds/Rotate.wav");
+
+        themes.get(0).ThemeName = "Classic";
+        themes.get(1).ThemeName = "Rounded";
+        themes.get(2).ThemeName = "GameBoy";
+
     }
+
+    //Todo: Add Move sound
+    //Todo: Add Spin sound
+    //Todo: Add Line Specific clear sounds
+    //Todo: Switch on off sounds / background - Also background music random or sequential
 
     private ThemeSet LoadImageSet(int count){
         return
@@ -86,9 +112,17 @@ public class MediaManager {
                         Color.LIGHTGREEN);
     }
 
+    public void NextTheme(){
+        themeInUse++;
+        if (themeInUse > setsToLoad)
+            themeInUse =0;
+    }
+
     public ThemeSet GetCurrentTheme(){
         return themes.get(themeInUse);
     }
+
+    public List<ThemeSet> GetAllThemes(){return themes ;}
 
     private AudioClip LoadClip(String path){
         try {
@@ -103,8 +137,48 @@ public class MediaManager {
         media.play();
     }
 
+    public void PlaySoundClip(SoundTypes type){
+        switch (type){
+            case MoveSound -> {
+                if (themes.get(themeInUse).MoveSound == null)
+                    return;
+                if(!themes.get(themeInUse).MoveSound.isPlaying())
+                    themes.get(themeInUse).MoveSound.play();
+            }
+            case SpinSound -> {
+                if (themes.get(themeInUse).SpinSound == null)
+                    return;
+                if(!themes.get(themeInUse).SpinSound.isPlaying())
+                    themes.get(themeInUse).SpinSound.play();
+            }
+            case HardDrop -> {
+                if (themes.get(themeInUse).HardDropSound == null)
+                    return;
+                if(!themes.get(themeInUse).HardDropSound.isPlaying())
+                    themes.get(themeInUse).HardDropSound.play();
+            }
+            case SoftDrop -> {
+                if (themes.get(themeInUse).SoftDropSound == null)
+                    return;
+                if(!themes.get(themeInUse).SoftDropSound.isPlaying())
+                    themes.get(themeInUse).SoftDropSound.play();
+            }
+            case GameOver -> {
+                if (themes.get(themeInUse).GameOverSound == null)
+                    return;
+                if(!themes.get(themeInUse).GameOverSound.isPlaying())
+                    themes.get(themeInUse).GameOverSound.play();
+            }
+        }
+
+    }
+
     public void StartBackgroundMusic(){
        PlayMidi(0);
+    }
+    public void StopBackgroundMusic(){
+        if(sequencer != null)
+            sequencer.stop();
     }
 
     public void PlayNext(){
@@ -133,8 +207,8 @@ public class MediaManager {
 
         try {
             sequencer.open();
-            InputStream is = new BufferedInputStream(new FileInputStream(backgroundSongs.get(tuneIndex)));
-            sequencer.setSequence(is);
+
+            sequencer.setSequence(backgroundSongs.get(tuneIndex).toURL().openStream());
             sequencer.start();
             currentBackgroundSong = tuneIndex;
 

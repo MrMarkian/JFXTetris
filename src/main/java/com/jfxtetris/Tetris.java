@@ -8,24 +8,27 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Tetris extends Application {
-
+    private static MainWindowController ui;
 
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Tetris.class.getResource("/Main-Window.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 700, 900);
+        Scene scene = new Scene(fxmlLoader.load(), 700, 1000);
+        ui = fxmlLoader.getController();
         stage.setTitle("Tetris!");
         stage.setScene(scene);
         stage.show();
 
         stage.setOnCloseRequest(we -> {
             System.out.println("Stage is closing");
-            MainWindowController ui = fxmlLoader.getController();
+             ui = fxmlLoader.getController();
             if(ui.GetGameManager() != null)
                 ui.GetGameManager().RequestShutdown();
         });
 
     }
-
+    public static MainWindowController getMainUIController(){
+        return ui;
+    }
     public static void main(String[] args) {
         launch();
     }

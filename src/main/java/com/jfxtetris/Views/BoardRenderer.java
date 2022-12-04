@@ -5,7 +5,9 @@ import com.jfxtetris.Models.GameBoard;
 import com.jfxtetris.Models.Tetrominos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 
 public class BoardRenderer {
 
@@ -16,12 +18,10 @@ public class BoardRenderer {
     Tetrominos pieces = new Tetrominos();
     GameManager gm;
 
+    //Todo: Add method to re-render the boarder and background on theme change
 
     public BoardRenderer(GameManager gameManager){
-
         gm = gameManager;
-        DoubleBuffer = gm.getGameBoard().GetBoard().clone();
-
         RefreshBuffer();
     }
 
@@ -43,7 +43,6 @@ public class BoardRenderer {
 
     public Pane RenderBoardToPane(GameBoard.CurrentPiece player){
 
-
         RefreshBuffer();
 
         Pane graphicsContext = new Pane();
@@ -62,6 +61,11 @@ public class BoardRenderer {
                 }
             }
         }
+
+        //Todo: Render ghostpiece
+
+
+
 
         for (int grid: DoubleBuffer) {
             Rectangle r = new Rectangle(LeftOffset + xPos + padding, TopOffset+ yPos + padding,RenderSize,RenderSize);
@@ -113,6 +117,14 @@ public class BoardRenderer {
                 }
 
             }
+
+          //  r.setArcHeight(15.0f);
+           // r.setArcWidth(30.0f);
+
+           // r.setStrokeType(StrokeType.INSIDE);
+           // r.setStrokeWidth(0.2f);
+           // r.setStroke(Color.RED);
+
 
             graphicsContext.getChildren().add(r);
             currentSquare ++;

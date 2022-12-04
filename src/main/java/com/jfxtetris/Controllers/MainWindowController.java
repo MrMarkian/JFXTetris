@@ -1,13 +1,18 @@
 package com.jfxtetris.Controllers;
 
+import com.jfxtetris.Models.GameSettings;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URISyntaxException;
@@ -32,7 +37,6 @@ public class MainWindowController {
     public Slider PaddingSlider;
     @FXML
     public Slider NextPiecesCount;
-
     @FXML
     public AnchorPane RenderAnchor;
     @FXML
@@ -41,7 +45,7 @@ public class MainWindowController {
     public GridPane StatsGrid;
 
     GameManager gameManager = null;
-
+    public GameSettings gameSettings = new GameSettings();
     @FXML
     private void StartNewGame(){
 
@@ -49,11 +53,28 @@ public class MainWindowController {
             gameManager.RequestShutdown();
         }
 
+        try {
+
+            Stage dialog = new Stage();
+            dialog.initOwner(RenderPane.getScene().getWindow());
+            dialog.initModality(Modality.APPLICATION_MODAL);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(MainWindowController.class.getResource("/NewGameWindow.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 370, 150);
+            dialog.setScene(scene);
+            dialog.showAndWait();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        System.out.println("Settings:" + gameSettings);
+
         Platform.runLater(() -> {
 
             try {
-                gameManager = new GameManager(RenderPane,OutBox, NextPieceBox, StatsGrid );
-                NextPiecesCount.setMax(gameManager.gameBoard.pieceRandomizer.GetBagSize());
+                gameManager = new GameManager(gameSettings,RenderPane,OutBox, NextPieceBox, StatsGrid );
+                NextPiecesCount.setMax(gameManager.gameBoard.settings.randomizer.GetBagSize());
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
@@ -103,7 +124,7 @@ public class MainWindowController {
         File file = fileChooser.showOpenDialog(null);
         if (gameManager == null) {
             try {
-                gameManager = new GameManager(RenderPane, OutBox, NextPieceBox, StatsGrid);
+                gameManager = new GameManager(new GameSettings(),RenderPane, OutBox, NextPieceBox, StatsGrid);
             } catch (URISyntaxException e) {
                 throw new RuntimeException(e);
             }
@@ -120,6 +141,22 @@ public class MainWindowController {
         gameManager.SaveGame(file.getPath());
     }
 
+    @FXML
+    public void SwitchtoNextTheme(){
+        gameManager.media.NextTheme();
+    }
+
+    @FXML
+    public void showThemeManager(){
+        ThemeWindowController themeWindowController = null;
+        themeWindowController = new ThemeWindowController(gameManager.media);
+        themeWindowController.SetMananger(gameManager.media);
+        try {
+            themeWindowController.start(new Stage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void DisplayAlert(String title, String header, String content) {
         Platform.runLater(() -> {
@@ -134,4 +171,5 @@ public class MainWindowController {
             });
         });
     }
+
 }

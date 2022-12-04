@@ -13,25 +13,29 @@ public class GameBoard implements Serializable {
     public List<Integer> vLines = new ArrayList<>();
     public int totalGameTicks = 0;
     public int numberOfNextPieces=1;
-    public int playerLevel = 0;
+
     public boolean forceDown = false;
     public boolean gameOver = false;
-    public int gameScore = 0;
+
     public int totalLines = 0;
 
-    public long FPSdelay =1;
-    public long lOGICdelay = 2;
-    public long INPUTdelay = 3;
+    public long FPSdelay = 1000 /60;
+    public long lOGICdelay = 1000 /48;
+    public long INPUTdelay = 1000 /12;
 
-    //--Constructors
-    public PieceRandomizer pieceRandomizer = new PieceRandomizer(PieceRandomizer.GameModeRND.TGM);
-    public CurrentPiece player1 = new CurrentPiece();
-    public GameBoard(){
+    public Player player = new Player();
+    public GameSettings settings;
+    public CurrentPiece fallingPiece;
+
+
+    public GameBoard(GameSettings settings){
         boardInit();
+        this.settings = settings;
+        fallingPiece = new CurrentPiece();
     }
 
     private void boardInit(){
-        playField = new int [BoardWidth * BoardHeight] ;
+        playField = new int [BoardWidth * BoardHeight];
 
         for(int x=0; x< BoardWidth; x++){
             for(int y = 0; y < BoardHeight; y++){
@@ -41,7 +45,7 @@ public class GameBoard implements Serializable {
     }
 
     public class CurrentPiece implements Serializable{
-        public int PieceType = pieceRandomizer.GetNextPiece();
+        public int PieceType = settings.randomizer.GetNextPiece();
         public int Rotation = 0;
         public int XPos = GetBoardWidth() / 2;
         public int YPos = 0;
@@ -51,11 +55,9 @@ public class GameBoard implements Serializable {
     public int[] GetBoard(){
         return playField;
     }
-
     public int GetBoardWidth(){
         return BoardWidth;
     }
-
     public int GetBoardHeight(){
         return BoardHeight;
     }
@@ -80,7 +82,6 @@ public class GameBoard implements Serializable {
             {
                 // Get index into piece
                 int pi = Rotate(px, py, nRotation);
-
                 // Get index into field
                 int fi = (nPosY + py) * BoardWidth + (nPosX + px);
 
@@ -93,9 +94,20 @@ public class GameBoard implements Serializable {
                             return false;
                     }
                 }
+                //Todo: Wallkicks go here
             }
 
         return true;
+    }
+
+    public boolean IsMoveAWallKick(CurrentPiece piece, int nRotation, int nPosX, int nPosY){
+        for(int px = 0; px < 4; px++){
+            for (int py = 0; py < 4; py++){
+                if(nPosX + px <0 || nPosX + px > BoardWidth) return true;
+            }
+        }
+
+        return false;
     }
 
 }

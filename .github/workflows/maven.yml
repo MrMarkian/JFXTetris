@@ -55,6 +55,6 @@ jobs:
             uses: actions/upload-artifact@v3
             with:
               name: assets-for-download-linux
-              path: D:\a\JFXTetris\JFXTetris\target\app.zip\
+              path: /home/runner/work/JFXTetris/JFXTetris/target/app.zip
 
 

@@ -16,7 +16,7 @@ on:
 
 jobs:
   build:
-
+    name: Build Windows
     runs-on: windows-latest
 
     steps:
@@ -31,7 +31,7 @@ jobs:
       run: mvn -B package --file pom.xml
     - name: JLink with Maven
       run: mvn -B javafx:jlink
-    - name: Step 3 - Use the Upload Artifact GitHub Action
+    - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
         name: assets-for-download

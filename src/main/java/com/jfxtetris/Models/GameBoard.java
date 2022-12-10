@@ -19,9 +19,7 @@ public class GameBoard implements Serializable {
 
     public int totalLines = 0;
 
-    public long FPSdelay = 1000 /60;
-    public long lOGICdelay = 1000 /48;
-    public long INPUTdelay = 1000 /12;
+
 
     public Player player = new Player();
     public GameSettings settings;

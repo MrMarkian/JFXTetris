@@ -2,7 +2,7 @@ package com.jfxtetris.Models;
 
 public class GameSettings {
     public String playerName;
-    public ScoreManager scoreManager;
+    public ScoreList scoreList;
     public boolean timedGame;
     public boolean allowSavedGame;
     public boolean renderAboveTopBoarder;
@@ -18,11 +18,18 @@ public class GameSettings {
     public boolean playSoundEffects;
     public int soundEffectsVolume;
 
+
+    public long FPSdelay;
+    public long lOGICdelay;
+    public long INPUTdelay;
+
+    public boolean rotationDirection;
+
     @Override
     public String toString() {
         return "GameSettings{" +
                 "playerName='" + playerName + '\'' +
-                ", scoreManager=" + scoreManager +
+                ", scoreList=" + scoreList +
                 ", timedGame=" + timedGame +
                 ", allowSavedGame=" + allowSavedGame +
                 ", renderAboveTopBoarder=" + renderAboveTopBoarder +
@@ -36,7 +43,10 @@ public class GameSettings {
                 ", rowVoicesVolume=" + rowVoicesVolume +
                 ", playSoundEffects=" + playSoundEffects +
                 ", soundEffectsVolume=" + soundEffectsVolume +
+                ", FPSdelay=" + FPSdelay +
+                ", lOGICdelay=" + lOGICdelay +
+                ", INPUTdelay=" + INPUTdelay +
+                ", rotationDirection=" + rotationDirection +
                 '}';
     }
-
 }

@@ -1,9 +1,6 @@
 package com.jfxtetris.Controllers;
 
-import com.jfxtetris.Models.GameBoard;
-import com.jfxtetris.Models.GameSettings;
-import com.jfxtetris.Models.SoundTypes;
-import com.jfxtetris.Models.Tetrominos;
+import com.jfxtetris.Models.*;
 import com.jfxtetris.Views.BoardRenderer;
 import com.jfxtetris.Views.TetrinomoRenderer;
 import javafx.application.Platform;
@@ -57,13 +54,13 @@ public class GameManager {
             //process input
 
             InputTimer = new Timer();
-            InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,gameBoard.INPUTdelay);
+            InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,gameBoard.settings.INPUTdelay);
             //Game Logic
             LogicTimer = new Timer();
-            LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, gameBoard.lOGICdelay);
+            LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, gameBoard.settings.lOGICdelay);
             //Game Timing & Rendering
             FPSTimer = new Timer();
-            FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.FPSdelay);
+            FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.settings.FPSdelay);
             if(gameBoard.settings.playBackGroundMusic)
              media.StartBackgroundMusic();
     }
@@ -233,6 +230,32 @@ public class GameManager {
                         }
                     }
 
+                    switch (gameBoard.vLines.size()) {
+                        case 1:
+                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Single);
+                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Single) + " To score .. now:" + gameBoard.player.Score);
+                            media.PlayVoice(1);
+                            break;
+                        case 2:
+                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Double) ;
+                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Double) + " To score");
+                            media.PlayVoice(2);
+                            break;
+                        case 3:
+                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Triple);
+                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Triple) + " To score");
+                            media.PlayVoice(3);
+                            break;
+                        case 4:
+                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Quad) ;
+                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Quad) + " To score");
+                            media.PlayVoice(4);
+                            break;
+
+                        default:
+                            break;
+                    }
+
                     // choose next piece                                                                                                                                                                                                                                                                                                                                                                                      8
                     gameBoard.pieceHistory.add(gameBoard.fallingPiece.PieceType);
                     gameBoard.fallingPiece = null;
@@ -272,14 +295,10 @@ public class GameManager {
                    gameBoard.forceDown = true;
                }
 
-               UpdateBoards();
-               UpdateUI();
-
                nextPieceRender.getChildren().clear();
                for(int a = 0; a < gameBoard.numberOfNextPieces; a++) {
                    nextPieceRender.getChildren().add(tetrinomoRenderer.RenderTetrinomo(gameBoard.settings.randomizer.PeekAt(a), 20, 3, media));
                }
-
                if(!gameBoard.vLines.isEmpty()){
                    for (int line : gameBoard.vLines) {
                        for(int px = 1; px < gameBoard.GetBoardWidth() -1; px++){
@@ -289,39 +308,16 @@ public class GameManager {
                            }
                        }
                    }
-                   gameBoard.player.Score += (gameBoard.vLines.size() * 100) + (hardDropLines * 10);
-                   gameBoard.totalLines += gameBoard.vLines.size();
-
-
-                   switch (gameBoard.vLines.size()) {
-                       case 1:
-                           gameBoard.player.Score += 100 * gameBoard.player.Level;
-                           media.PlayVoice(1);
-                           break;
-                       case 2:
-                           gameBoard.player.Score += 300 * gameBoard.player.Level;
-                           media.PlayVoice(2);
-                           break;
-                       case 3:
-                           media.PlayVoice(3);
-                           break;
-                       case 4:
-                           media.PlayVoice(4);
-                           break;
-                       case 5:
-                           media.PlayVoice(5);
-                           break;
-                       default:
-                           break;
-                   }
-
-                   gameBoard.vLines.clear();
-
+                    gameBoard.totalLines += gameBoard.vLines.size();
                    hardDropLines = 0;
-
-
+                   gameBoard.vLines.clear();
                }
+               UpdateBoards();
+               UpdateUI();
            });
+
+
+
        }
    }
 

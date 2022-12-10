@@ -5,13 +5,9 @@ import com.jfxtetris.Models.GameBoard;
 import com.jfxtetris.Models.Tetrominos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.StrokeType;
 
 public class BoardRenderer {
-
-
     int RenderSize = 40;
     int padding = 0;
     int[] DoubleBuffer;
@@ -64,9 +60,6 @@ public class BoardRenderer {
 
         //Todo: Render ghostpiece
 
-
-
-
         for (int grid: DoubleBuffer) {
             Rectangle r = new Rectangle(LeftOffset + xPos + padding, TopOffset+ yPos + padding,RenderSize,RenderSize);
 
@@ -118,14 +111,6 @@ public class BoardRenderer {
 
             }
 
-          //  r.setArcHeight(15.0f);
-           // r.setArcWidth(30.0f);
-
-           // r.setStrokeType(StrokeType.INSIDE);
-           // r.setStrokeWidth(0.2f);
-           // r.setStroke(Color.RED);
-
-
             graphicsContext.getChildren().add(r);
             currentSquare ++;
             xPos += RenderSize + padding;
@@ -138,5 +123,4 @@ public class BoardRenderer {
         }
         return graphicsContext;
     }
-
 }

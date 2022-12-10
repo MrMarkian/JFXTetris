@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
@@ -46,27 +47,40 @@
             </TitledPane>
             <TitledPane alignment="TOP_RIGHT" contentDisplay="RIGHT" prefHeight="110.0" prefWidth="179.0" text="Scoring" wrapText="true">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane fx:id="ScoreingAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
               </content>
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
                <graphic>
-                  <ComboBox prefWidth="196.0" promptText="Scoring Preset" />
+                  <ComboBox fx:id="scoringPresetDropDown" onAction="#RefreshScoringList" prefWidth="196.0" promptText="Scoring Preset" />
                </graphic>
             </TitledPane>
             <TitledPane animated="false" text="Timings">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane fx:id="TimingsAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="inputDelayEntry" layoutX="116.0" layoutY="14.0" text="50" />
+                        <TextField fx:id="logicDelayEntry" layoutX="116.0" layoutY="51.0" text="20" />
+                        <TextField fx:id="fpsDelayEntry" layoutX="116.0" layoutY="88.0" text="16" />
+                        <Label layoutX="29.0" layoutY="18.0" prefHeight="17.0" prefWidth="66.0" text="Input Delay:" />
+                        <Label layoutX="31.0" layoutY="55.0" text="Logic Delay:" />
+                        <Label layoutX="36.0" layoutY="88.0" text="FPS Delay:" />
+                     </children></AnchorPane>
               </content>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </TitledPane>
             <TitledPane animated="false" text="Sounds &amp; Music">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="102.0" prefWidth="279.0">
                      <children>
-                        <CheckBox fx:id="backgroundMusicCheckbox" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Play Background Music" />
-                        <CheckBox fx:id="tetrisCallOutCheckBox" layoutX="14.0" layoutY="39.0" mnemonicParsing="false" text="Play Tetris Call Outs" />
-                        <CheckBox fx:id="playSoundsCheckbox" layoutX="14.0" layoutY="64.0" mnemonicParsing="false" text="Play Sounds" />
+                        <CheckBox fx:id="backgroundMusicCheckbox" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Play Background Music" />
+                        <CheckBox fx:id="tetrisCallOutCheckBox" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" selected="true" text="Play Tetris Call Outs" />
+                        <CheckBox fx:id="playSoundsCheckbox" layoutX="14.0" layoutY="96.0" mnemonicParsing="false" selected="true" text="Play Sounds" />
+                        <Slider fx:id="backroundMusicVolume" layoutX="99.0" layoutY="39.0" prefHeight="25.0" prefWidth="164.0" />
+                        <Label layoutX="43.0" layoutY="43.0" text="Volume" />
                      </children></AnchorPane>
               </content>
             </TitledPane>
@@ -76,7 +90,7 @@
       <CheckBox fx:id="saveHighScore" layoutX="44.0" layoutY="200.0" mnemonicParsing="false" selected="true" text="Allow high score save" />
       <CheckBox fx:id="renderAboveTop" layoutX="44.0" layoutY="226.0" mnemonicParsing="false" text="Render above top border" />
       <CheckBox fx:id="showGhostPiece" layoutX="44.0" layoutY="248.0" mnemonicParsing="false" text="Show ghost piece" />
-      <CheckBox fx:id="allowWallKicks" layoutX="44.0" layoutY="278.0" mnemonicParsing="false" text="Allow Wall kicks" />
+      <CheckBox fx:id="allowWallKicks" layoutX="44.0" layoutY="278.0" mnemonicParsing="false" selected="true" text="Allow Wall kicks" />
       <ComboBox fx:id="gameModeCombo" layoutX="121.0" layoutY="122.0" prefHeight="25.0" prefWidth="179.0" promptText="Game Mode" />
       <Label layoutX="37.0" layoutY="126.0" text="Game Mode" />
       <Button fx:id="StartButton" layoutX="184.0" layoutY="336.0" mnemonicParsing="false" onAction="#StartNewGameClicked" prefHeight="45.0" prefWidth="213.0" text="Start">

@@ -178,7 +178,8 @@ public class MediaManager {
     }
     public void StopBackgroundMusic(){
         if(sequencer != null)
-            sequencer.stop();
+            if(sequencer.isOpen())
+                sequencer.stop();
     }
 
     public void PlayNext(){
@@ -209,7 +210,9 @@ public class MediaManager {
             sequencer.open();
 
             sequencer.setSequence(backgroundSongs.get(tuneIndex).toURL().openStream());
+
             sequencer.start();
+            SetBackgroundVolume(1);
             currentBackgroundSong = tuneIndex;
 
             sequencer.addMetaEventListener(meta -> {
@@ -220,6 +223,23 @@ public class MediaManager {
 
         } catch (MidiUnavailableException | IOException | InvalidMidiDataException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void SetBackgroundVolume(double gain){ //Todo: Midi Volume needs more work
+        Synthesizer synth;
+
+        try {
+            synth = MidiSystem.getSynthesizer();
+        } catch (MidiUnavailableException e) {
+            throw new RuntimeException(e);
+        }
+
+
+        if(synth !=null){
+            for (MidiChannel channel: synth.getChannels()) {
+                channel.controlChange(7, (int) (gain));
+            }
         }
     }
 

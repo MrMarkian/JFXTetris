@@ -60,7 +60,9 @@ public class MainWindowController {
             dialog.initModality(Modality.APPLICATION_MODAL);
 
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindowController.class.getResource("/NewGameWindow.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 370, 150);
+            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            dialog.setResizable(false);
+            dialog.setTitle("New Game");
             dialog.setScene(scene);
             dialog.showAndWait();
 
@@ -73,6 +75,8 @@ public class MainWindowController {
         Platform.runLater(() -> {
 
             try {
+                if(gameSettings.randomizer == null)
+                    return;
                 gameManager = new GameManager(gameSettings,RenderPane,OutBox, NextPieceBox, StatsGrid );
                 NextPiecesCount.setMax(gameManager.gameBoard.settings.randomizer.GetBagSize());
             } catch (URISyntaxException e) {
@@ -148,6 +152,8 @@ public class MainWindowController {
 
     @FXML
     public void showThemeManager(){
+        if(gameManager == null) //Todo: Clean this up. program should be able to show window manager if no game playing..
+            return;
         ThemeWindowController themeWindowController = null;
         themeWindowController = new ThemeWindowController(gameManager.media);
         themeWindowController.SetMananger(gameManager.media);

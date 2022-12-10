@@ -5,17 +5,13 @@ import com.jfxtetris.Tetris;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -70,12 +66,11 @@ public class NewGameWindowController extends Application implements Initializabl
     @FXML
     private Slider backroundMusicVolume;
 
-    private GameSettings settings;
     ScoreManager sm = new ScoreManager();
 
     @FXML
     void StartNewGameClicked(ActionEvent event) {
-        settings = new GameSettings();
+        GameSettings settings = new GameSettings();
         settings.playerName = playerNameText.getText();
         settings.allowWallKicks = allowWallKicks.isSelected();
         settings.allowSavedGame = saveHighScore.isSelected();
@@ -95,11 +90,6 @@ public class NewGameWindowController extends Application implements Initializabl
         MainUi.gameSettings = settings;
        Stage closed = (Stage) StartButton.getScene().getWindow();
        closed.close();
-    }
-
-    @Override
-    public void init() throws Exception {
-        super.init();
     }
 
     @Override

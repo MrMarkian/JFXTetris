@@ -6,17 +6,17 @@ import javafx.scene.paint.Paint;
 
 public class ThemeSet {
     String ThemeName;
-    Paint IPiece;
-    Paint OPiece;
-    Paint TPiece;
-    Paint JPiece;
-    Paint LPiece;
-    Paint SPiece;
-    Paint ZPiece;
-    Paint Boarder;
-    Paint Padding;
-    Paint DestroyedPiece;
-    Paint EmptySpace;
+    final Paint IPiece;
+    final Paint OPiece;
+    final Paint TPiece;
+    final Paint JPiece;
+    final Paint LPiece;
+    final Paint SPiece;
+    final Paint ZPiece;
+    final Paint Boarder;
+    final Paint Padding;
+    final Paint DestroyedPiece;
+    final Paint EmptySpace;
     Paint GhostPiece;
     Paint GarbagePiece;
 

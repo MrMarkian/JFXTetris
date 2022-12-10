@@ -9,8 +9,8 @@ public class GameBoard implements Serializable {
     final int BoardWidth = 10;
     final int BoardHeight = 24;
     int[] playField; //Maybe change this datatype
-    public List<Integer> pieceHistory = new ArrayList<>();
-    public List<Integer> vLines = new ArrayList<>();
+    final public List<Integer> pieceHistory = new ArrayList<>();
+    final public List<Integer> vLines = new ArrayList<>();
     public int totalGameTicks = 0;
     public int numberOfNextPieces=1;
 
@@ -19,8 +19,8 @@ public class GameBoard implements Serializable {
 
     public int totalLines = 0;
 
-    public Player player = new Player();
-    public GameSettings settings;
+    final public Player player = new Player();
+    final public GameSettings settings;
     public CurrentPiece fallingPiece;
 
     public GameBoard(GameSettings settings){
@@ -40,7 +40,7 @@ public class GameBoard implements Serializable {
     }
 
     public class CurrentPiece implements Serializable{
-        public int PieceType = settings.randomizer.GetNextPiece();
+        final public int PieceType = settings.randomizer.GetNextPiece();
         public int Rotation = 0;
         public int XPos = GetBoardWidth() / 2;
         public int YPos = 0;
@@ -94,15 +94,4 @@ public class GameBoard implements Serializable {
 
         return true;
     }
-
-    public boolean IsMoveAWallKick(CurrentPiece piece, int nRotation, int nPosX, int nPosY){
-        for(int px = 0; px < 4; px++){
-            for (int py = 0; py < 4; py++){
-                if(nPosX + px <0 || nPosX + px > BoardWidth) return true;
-            }
-        }
-
-        return false;
-    }
-
 }

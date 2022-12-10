@@ -7,11 +7,8 @@ import javafx.scene.paint.ImagePattern;
 
 import javax.sound.midi.*;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,8 +37,7 @@ public class MediaManager {
         voiceNumbers.add(LoadClip("/Voice/4.wav"));
         voiceNumbers.add(LoadClip("/Voice/5.wav"));
 
-        URI a = null;
-        a = Objects.requireNonNull(getClass().getResource("/Midi/TetrisA.mid")).toURI();
+        URI a = Objects.requireNonNull(getClass().getResource("/Midi/TetrisA.mid")).toURI();
 
         backgroundSongs.add(a);
 

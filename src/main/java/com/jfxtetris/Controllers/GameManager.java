@@ -71,7 +71,6 @@ public class GameManager {
     //Todo: Render above top border (adjustable)
 
     private void RunInputs(){
-        UpdateBackgroundMusic();
 
         if(gameBoard.fallingPiece == null || hardDrop)
             return;
@@ -145,9 +144,6 @@ public class GameManager {
                 media.PlaySoundClip(SoundTypes.HardDrop);
         }
        // UpdateBoards();
-    }
-
-    private void UpdateBackgroundMusic() {
     }
 
     private class OnTimerInputUpdate extends TimerTask{

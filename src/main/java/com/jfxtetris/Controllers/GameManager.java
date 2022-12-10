@@ -143,6 +143,7 @@ public class GameManager {
             if(gameBoard.settings.playSoundEffects)
                 media.PlaySoundClip(SoundTypes.HardDrop);
         }
+
        // UpdateBoards();
     }
 

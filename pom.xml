@@ -65,8 +65,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>19.0.1</source>
+                    <target>19.0.1</target>
                 </configuration>
             </plugin>
             <plugin>

@@ -37,7 +37,6 @@ jobs:
         name: assets-for-download
         path: D:\a\JFXTetris\JFXTetris\target\app.zip\
 
-job:
 build:
         name: Build Linux
         runs-on: linux-latest

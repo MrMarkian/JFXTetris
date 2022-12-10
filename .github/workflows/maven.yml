@@ -32,9 +32,9 @@ jobs:
     - name: JLink with Maven
       run: mvn -B javafx:jlink
     - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
-        name: assets-for-download
+        name: assets-for-download-windows
         path: D:\a\JFXTetris\JFXTetris\target\app.zip\
   build2:
      name: Build Linux
@@ -52,9 +52,9 @@ jobs:
           - name: JLink with Maven
             run: mvn -B javafx:jlink
           - name: Upload Artifact
-            uses: actions/upload-artifact@v2
+            uses: actions/upload-artifact@v3
             with:
-              name: assets-for-download
+              name: assets-for-download-linux
               path: D:\a\JFXTetris\JFXTetris\target\app.zip\
 
 

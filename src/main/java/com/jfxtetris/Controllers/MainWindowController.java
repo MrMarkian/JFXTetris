@@ -154,7 +154,7 @@ public class MainWindowController {
     public void showThemeManager(){
         if(gameManager == null) //Todo: Clean this up. program should be able to show window manager if no game playing..
             return;
-        ThemeWindowController themeWindowController = null;
+        ThemeWindowController themeWindowController ;
         themeWindowController = new ThemeWindowController(gameManager.media);
         themeWindowController.SetMananger(gameManager.media);
         try {

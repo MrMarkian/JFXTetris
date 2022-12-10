@@ -71,6 +71,22 @@ public class ThemeSet {
         return EmptySpace;
     }
 
+    public Paint getGhostPiece() {
+        return GhostPiece;
+    }
+
+    public void setGhostPiece(Paint ghostPiece) {
+        GhostPiece = ghostPiece;
+    }
+
+    public Paint getGarbagePiece() {
+        return GarbagePiece;
+    }
+
+    public void setGarbagePiece(Paint garbagePiece) {
+        GarbagePiece = garbagePiece;
+    }
+
     public Paint getFromIndex(int index){
         return switch (index) {
             case 1 -> IPiece;
@@ -84,7 +100,7 @@ public class ThemeSet {
         };
     }
 
-    public ThemeSet(Paint I, Paint O, Paint T, Paint J, Paint L, Paint S, Paint Z, Paint boarder, Paint padding, Paint destroyed, Paint emptySpace){
+    public ThemeSet(Paint I, Paint O, Paint T, Paint J, Paint L, Paint S, Paint Z, Paint boarder, Paint padding, Paint destroyed, Paint emptySpace, Paint ghost){
         IPiece = I;
         OPiece = O;
         TPiece = T;
@@ -96,6 +112,7 @@ public class ThemeSet {
         Padding = padding;
         DestroyedPiece = destroyed;
         EmptySpace = emptySpace;
+        this.GhostPiece = ghost;
 
     }
 

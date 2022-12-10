@@ -12,7 +12,7 @@ public class BoardRenderer {
     int padding = 0;
     int[] DoubleBuffer;
     Tetrominos pieces = new Tetrominos();
-    GameManager gm;
+    final GameManager gm;
 
     //Todo: Add method to re-render the boarder and background on theme change
 
@@ -59,7 +59,25 @@ public class BoardRenderer {
         }
 
         //Todo: Render ghostpiece
+        if(gm.getGameBoard().settings.showGhostPiece) {
+            for (int a = gm.getGameBoard().GetBoardHeight(); a > 0; a--) {
+                if (gm.getGameBoard().DoesPieceFit(player.PieceType, gm.getGameBoard().fallingPiece.Rotation, player.XPos, a-4)) {
+                    a = a -4;
 
+                    for (int px = 0; px < 4; px++) { //render player overlayed into double buffer
+                        for (int py = 0; py < 4; py++) {
+
+                            if (Tetrominos.shapes.get(player.PieceType).charAt(gm.getGameBoard().Rotate(px, py, player.Rotation)) == 'x') {
+                                DoubleBuffer[( a + py)  * gm.getGameBoard().GetBoardWidth() + (player.XPos + px)] = 10;
+                            }
+                        }
+                    }
+                    a=0;
+                }
+                System.out.println("Finding Y for Ghost:" + a + " GameHeight:" + gm.getGameBoard().GetBoardHeight());
+            }
+
+        }
         for (int grid: DoubleBuffer) {
             Rectangle r = new Rectangle(LeftOffset + xPos + padding, TopOffset+ yPos + padding,RenderSize,RenderSize);
 
@@ -102,6 +120,10 @@ public class BoardRenderer {
                 }
                 case 9:{
                     r.setFill(gm.getMediaManager().GetCurrentTheme().getBoarder());
+                    break;
+                }
+                case 10:{ //Ghost Piece
+                    r.setFill(gm.getMediaManager().GetCurrentTheme().getGhostPiece());
                     break;
                 }
                 default:{

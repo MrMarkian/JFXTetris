@@ -224,36 +224,35 @@ public class GameManager {
                                       gameBoard.GetBoard()[(gameBoard.fallingPiece.YPos + py) * gameBoard.GetBoardWidth() + px] = -1;
                                   }
                                     gameBoard.vLines.add(gameBoard.fallingPiece.YPos + py);
-                                    gameBoard.player.Level = (int) gameBoard.totalLines / 10;
+                                    gameBoard.player.Level = gameBoard.totalLines / 10;
                               }
 
                         }
                     }
 
                     switch (gameBoard.vLines.size()) {
-                        case 1:
+                        case 1 -> {
                             gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Single);
                             System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Single) + " To score .. now:" + gameBoard.player.Score);
                             media.PlayVoice(1);
-                            break;
-                        case 2:
-                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Double) ;
+                        }
+                        case 2 -> {
+                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Double);
                             System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Double) + " To score");
                             media.PlayVoice(2);
-                            break;
-                        case 3:
+                        }
+                        case 3 -> {
                             gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Triple);
                             System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Triple) + " To score");
                             media.PlayVoice(3);
-                            break;
-                        case 4:
-                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Quad) ;
+                        }
+                        case 4 -> {
+                            gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Quad);
                             System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Quad) + " To score");
                             media.PlayVoice(4);
-                            break;
-
-                        default:
-                            break;
+                        }
+                        default -> {
+                        }
                     }
 
                     // choose next piece                                                                                                                                                                                                                                                                                                                                                                                      8

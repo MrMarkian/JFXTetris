@@ -26,7 +26,6 @@ public class MediaManager {
 
     private final List<ThemeSet> themes = new ArrayList<>();
     private int themeInUse =2;
-    private int setsToLoad = 2;
 
     public MediaManager() throws URISyntaxException {
         try {
@@ -109,11 +108,13 @@ public class MediaManager {
                         Color.DARKGREEN,
                         Color.DARKGREEN,
                         Color.FIREBRICK,
-                        Color.LIGHTGREEN);
+                        Color.LIGHTGREEN,
+                        Color.LIGHTGRAY);
     }
 
     public void NextTheme(){
         themeInUse++;
+        int setsToLoad = 2;
         if (themeInUse > setsToLoad)
             themeInUse =0;
     }

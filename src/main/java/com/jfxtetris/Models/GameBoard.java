@@ -6,8 +6,8 @@ import java.util.List;
 
 public class GameBoard implements Serializable {
 
-    int BoardWidth = 10;
-    int BoardHeight = 24;
+    final int BoardWidth = 10;
+    final int BoardHeight = 24;
     int[] playField; //Maybe change this datatype
     public List<Integer> pieceHistory = new ArrayList<>();
     public List<Integer> vLines = new ArrayList<>();
@@ -19,12 +19,9 @@ public class GameBoard implements Serializable {
 
     public int totalLines = 0;
 
-
-
     public Player player = new Player();
     public GameSettings settings;
     public CurrentPiece fallingPiece;
-
 
     public GameBoard(GameSettings settings){
         boardInit();

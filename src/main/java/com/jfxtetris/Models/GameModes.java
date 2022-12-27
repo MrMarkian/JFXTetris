@@ -2,7 +2,7 @@ package com.jfxtetris.Models;
 
 public enum GameModes {
     Standard,
-    Squaremode,
+    SquareMode,
     Hotline,
     Cascade,
 }

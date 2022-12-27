@@ -16,11 +16,9 @@ public class PieceRandomizer implements Serializable {
         TGM
     }
 
-
     public PieceRandomizer(GameModeRND mode){
         modeRND = mode;
         GenerateNewBag();
-
     }
 
     public int GetBagSize(){
@@ -28,7 +26,6 @@ public class PieceRandomizer implements Serializable {
             return 1;
         return bagSize;
     }
-
 
     private void GenerateNewBag() {
         boolean isFound = false;

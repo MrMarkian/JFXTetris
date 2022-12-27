@@ -1,5 +1,7 @@
 package com.jfxtetris.Models;
 
+import com.jfxtetris.Controllers.GameTimer;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +24,13 @@ public class GameBoard implements Serializable {
     final public Player player = new Player();
     final public GameSettings settings;
     public CurrentPiece fallingPiece;
+    public GameTimer gameTime;
 
     public GameBoard(GameSettings settings){
         boardInit();
         this.settings = settings;
         fallingPiece = new CurrentPiece();
+        gameTime = new GameTimer();
     }
 
     private void boardInit(){

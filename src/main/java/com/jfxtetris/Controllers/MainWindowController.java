@@ -5,10 +5,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -16,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.Objects;
 
 public class MainWindowController {
 
@@ -30,6 +28,8 @@ public class MainWindowController {
     @FXML
     public Label LevelLabel;
     @FXML
+    public Label gameTimeLabel;
+    @FXML
     public VBox OutBox;
     @FXML
     public Slider GridSizeSlider;
@@ -43,6 +43,9 @@ public class MainWindowController {
     public HBox NextPieceBox;
     @FXML
     public GridPane StatsGrid;
+
+    @FXML
+    public CheckMenuItem DarkModeMenu;
 
     GameManager gameManager = null;
     public GameSettings gameSettings = new GameSettings();
@@ -147,6 +150,8 @@ public class MainWindowController {
 
     @FXML
     public void SwitchtoNextTheme(){
+        if(gameManager == null)
+            return;
         gameManager.media.NextTheme();
     }
 
@@ -162,6 +167,13 @@ public class MainWindowController {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    public void SwitchToDarkMode(){
+        RenderPane.getScene().getStylesheets().clear();
+        if (DarkModeMenu.isSelected())
+            RenderPane.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/CSS/DarkMode.css")).toExternalForm());
     }
 
     public static void DisplayAlert(String title, String header, String content) {

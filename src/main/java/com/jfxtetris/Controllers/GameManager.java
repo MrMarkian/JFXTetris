@@ -61,8 +61,12 @@ public class GameManager {
             //Game Timing & Rendering
             FPSTimer = new Timer();
             FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.settings.FPSdelay);
+
+            if(gameBoard.settings.timedGame)
+                gameBoard.gameTime.StartTimer();
+
             if(gameBoard.settings.playBackGroundMusic)
-             media.StartBackgroundMusic();
+                media.StartBackgroundMusic();
     }
 
 
@@ -265,10 +269,7 @@ public class GameManager {
                         if(gameBoard.settings.playSoundEffects)
                             media.PlaySoundClip(SoundTypes.GameOver);
                     }
-
-
                 }
-
             }
         }
     }
@@ -329,6 +330,9 @@ public class GameManager {
            }
             if(n.getId().equals("LevelLabel")){
                 ((Label)n).setText("LEVEL: " + gameBoard.player.Level);
+            }
+            if(n.getId().equals("gameTimeLabel")){
+                ((Label)n).setText("TIME: " + gameBoard.gameTime.GetGameTime());
             }
         }
         RenderStatsGrid(stats);

@@ -24,6 +24,9 @@ public class GameTimer {
         timer.schedule(new timerRunner(), 1000, 1000);
     }
 
+    public void StopTimer(){
+        timer.cancel();
+    }
     private class timerRunner extends TimerTask {
 
         @Override

@@ -46,6 +46,8 @@ public class MainWindowController {
 
     @FXML
     public CheckMenuItem DarkModeMenu;
+    @FXML
+    public CheckMenuItem PauseGameCheckbox;
 
     GameManager gameManager = null;
     public GameSettings gameSettings = new GameSettings();
@@ -116,7 +118,7 @@ public class MainWindowController {
     @FXML
     public void TestNextPiece(){
 
-        RenderAnchor.getChildren().add(gameManager.tetrinomoRenderer.RenderTetrinomo(2,50,4, gameManager.media));
+        RenderAnchor.getChildren().add(gameManager.tetrinomoRenderer.RenderTetrinomo(2,50,4, gameManager.media.GetCurrentTheme()));
     }
 
     @FXML
@@ -146,6 +148,11 @@ public class MainWindowController {
         File file =  fileChooser.showSaveDialog(null);
 
         gameManager.SaveGame(file.getPath());
+    }
+
+    @FXML
+    public void PauseGame(){
+        gameManager.PauseGame(PauseGameCheckbox.isSelected());
     }
 
     @FXML

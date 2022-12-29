@@ -36,6 +36,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#LevelUp" text="LevelUP" />
                   <MenuItem mnemonicParsing="false" onAction="#SwitchtoNextTheme" text="Next Theme" />
                   <CheckMenuItem fx:id="DarkModeMenu" mnemonicParsing="false" onAction="#SwitchToDarkMode" text="Dark Mode" />
+                  <CheckMenuItem fx:id="PauseGameCheckbox" mnemonicParsing="false" onAction="#PauseGame" text="Pause Game" />
                   <MenuItem mnemonicParsing="false" onAction="#showThemeManager" text="Show Theme Manager" />
                     </items>
                 </Menu>

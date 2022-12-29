@@ -12,13 +12,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="450.0" prefWidth="780.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jfxtetris.Controllers.ThemeWindowController">
+<AnchorPane prefHeight="450.0" prefWidth="858.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jfxtetris.Controllers.ThemeWindowController">
    <children>
       <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-154.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox>
                <children>
-                  <ListView fx:id="themeList" VBox.vgrow="ALWAYS">
+                  <ListView fx:id="themeList" onEditCommit="#SwitchThemeSelection" VBox.vgrow="ALWAYS">
                      <opaqueInsets>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </opaqueInsets>
@@ -28,7 +28,7 @@
                   </ListView>
                   <ButtonBar prefHeight="40.0" prefWidth="200.0">
                     <buttons>
-                      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="119.0" text="New" />
+                      <Button mnemonicParsing="false" onAction="#NewThemeClick" prefHeight="25.0" prefWidth="119.0" text="New" />
                         <SplitMenuButton mnemonicParsing="false" text="SplitMenuButton">
                           <items>
                             <MenuItem mnemonicParsing="false" text="Save" />
@@ -42,13 +42,13 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox>
+            <VBox HBox.hgrow="ALWAYS">
                <children>
                   <TabPane tabClosingPolicy="UNAVAILABLE" tabMinWidth="25.0" VBox.vgrow="ALWAYS">
                     <tabs>
                         <Tab text="Preview">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="RenderPreviewAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                       <Tab text="I">

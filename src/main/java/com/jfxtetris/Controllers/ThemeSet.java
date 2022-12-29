@@ -132,8 +132,6 @@ public class ThemeSet {
 
     @Override
     public String toString() {
-        return "ThemeSet{" +
-                "ThemeName='" + ThemeName + '\'' +
-                '}';
+        return ThemeName;
     }
 }

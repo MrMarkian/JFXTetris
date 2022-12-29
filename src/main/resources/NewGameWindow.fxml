@@ -16,7 +16,10 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jfxtetris.Controllers.NewGameWindowController">
    <children>
-      <TextField fx:id="playerNameText" layoutX="37.0" layoutY="83.0" prefHeight="25.0" prefWidth="263.0" promptText="Name.." />
+      <TextField fx:id="playerNameText" layoutX="37.0" layoutY="83.0" prefHeight="25.0" prefWidth="263.0" promptText="Name..">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></TextField>
       <Label layoutX="210.0" layoutY="14.0" prefHeight="45.0" prefWidth="136.0" text="New Game">
          <font>
             <Font name="Agency FB Bold" size="37.0" />
@@ -44,6 +47,9 @@
                <graphic>
                   <ComboBox fx:id="randomiserDropdown" prefWidth="150.0" />
                </graphic>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </TitledPane>
             <TitledPane alignment="TOP_RIGHT" contentDisplay="RIGHT" prefHeight="110.0" prefWidth="179.0" text="Scoring" wrapText="true">
               <content>
@@ -81,22 +87,37 @@
                         <CheckBox fx:id="playSoundsCheckbox" layoutX="14.0" layoutY="96.0" mnemonicParsing="false" selected="true" text="Play Sounds" />
                         <Slider fx:id="backroundMusicVolume" layoutX="99.0" layoutY="39.0" prefHeight="25.0" prefWidth="164.0" />
                         <Label layoutX="43.0" layoutY="43.0" text="Volume" />
+                        <CheckBox fx:id="RandomMusicOrderCheckbox" layoutX="172.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Random Order" />
                      </children></AnchorPane>
               </content>
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
             </TitledPane>
          </panes>
       </Accordion>
-      <CheckBox fx:id="timedGameCheckBox" layoutX="44.0" layoutY="171.0" mnemonicParsing="false" selected="true" text="Timed Game" />
-      <CheckBox fx:id="saveHighScore" layoutX="44.0" layoutY="200.0" mnemonicParsing="false" selected="true" text="Allow high score save" />
-      <CheckBox fx:id="renderAboveTop" layoutX="44.0" layoutY="226.0" mnemonicParsing="false" text="Render above top border" />
-      <CheckBox fx:id="showGhostPiece" layoutX="44.0" layoutY="248.0" mnemonicParsing="false" text="Show ghost piece" />
-      <CheckBox fx:id="allowWallKicks" layoutX="44.0" layoutY="278.0" mnemonicParsing="false" selected="true" text="Allow Wall kicks" />
       <ComboBox fx:id="gameModeCombo" layoutX="121.0" layoutY="122.0" prefHeight="25.0" prefWidth="179.0" promptText="Game Mode" />
-      <Label layoutX="37.0" layoutY="126.0" text="Game Mode" />
+      <Label layoutX="37.0" layoutY="126.0" text="Game Mode">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
       <Button fx:id="StartButton" layoutX="184.0" layoutY="336.0" mnemonicParsing="false" onAction="#StartNewGameClicked" prefHeight="45.0" prefWidth="213.0" text="Start">
          <font>
             <Font name="System Bold" size="22.0" />
          </font>
       </Button>
+      <TitledPane animated="false" collapsible="false" layoutX="32.0" layoutY="154.0" prefHeight="173.0" prefWidth="269.0" text="Options">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <CheckBox fx:id="timedGameCheckBox" layoutX="12.0" layoutY="14.0" mnemonicParsing="false" selected="true" text="Timed Game" />
+                  <CheckBox fx:id="saveHighScore" layoutX="12.0" layoutY="39.0" mnemonicParsing="false" selected="true" text="Allow high score save" />
+                  <CheckBox fx:id="renderAboveTop" layoutX="11.0" layoutY="65.0" mnemonicParsing="false" text="Render above top border" />
+                  <CheckBox fx:id="showGhostPiece" layoutX="14.0" layoutY="90.0" mnemonicParsing="false" text="Show ghost piece" />
+                  <CheckBox fx:id="allowWallKicks" layoutX="12.0" layoutY="116.0" mnemonicParsing="false" selected="true" text="Allow Wall kicks" />
+               </children>
+            </AnchorPane>
+        </content>
+      </TitledPane>
    </children>
 </AnchorPane>

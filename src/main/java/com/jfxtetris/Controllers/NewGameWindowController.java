@@ -50,6 +50,8 @@ public class NewGameWindowController extends Application implements Initializabl
     @FXML
     private CheckBox backgroundMusicCheckbox;
     @FXML
+    private CheckBox RandomMusicOrderCheckbox;
+    @FXML
     private CheckBox playSoundsCheckbox;
     @FXML
     private CheckBox tetrisCallOutCheckBox;
@@ -86,6 +88,7 @@ public class NewGameWindowController extends Application implements Initializabl
         settings.FPSdelay = Integer.parseInt(fpsDelayEntry.getText());
         settings.backGroundMusicVolume = ((int) backroundMusicVolume.getValue());
         settings.scoreList = scoringPresetDropDown.getSelectionModel().getSelectedItem();
+        settings.isPlayBackGroundMusicRandomOrder = RandomMusicOrderCheckbox.isSelected();
         MainWindowController MainUi = Tetris.getMainUIController();
         MainUi.gameSettings = settings;
        Stage closed = (Stage) StartButton.getScene().getWindow();

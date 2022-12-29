@@ -46,17 +46,7 @@ public class BoardRenderer {
             return graphicsContext;
 
         graphicsContext.setBackground(Background.fill(gm.getMediaManager().GetCurrentTheme().getPadding()));
-        int xPos=0, yPos =0, currentSquare =0;
-        int TopOffset = 0, LeftOffset = 0;
 
-        for(int px = 0; px < 4; px++){ //render player overlayed into double buffer
-            for(int py=0; py < 4; py++){
-
-                if(Tetrominos.shapes.get(player.PieceType).charAt(gm.getGameBoard().Rotate(px,py, player.Rotation)) == 'x'){
-                    DoubleBuffer[(player.YPos + py) * gm.getGameBoard().GetBoardWidth() + (player.XPos + px)] = player.PieceType;
-                }
-            }
-        }
 
         //Todo: Render ghostpiece
         if(gm.getGameBoard().settings.showGhostPiece) {
@@ -74,10 +64,25 @@ public class BoardRenderer {
                     }
                     a=0;
                 }
-                System.out.println("Finding Y for Ghost:" + a + " GameHeight:" + gm.getGameBoard().GetBoardHeight());
+               // System.out.println("Finding Y for Ghost:" + a + " GameHeight:" + gm.getGameBoard().GetBoardHeight());
             }
 
+
+
         }
+
+        int xPos=0, yPos =0, currentSquare =0;
+        int TopOffset = 0, LeftOffset = 0;
+
+        for(int px = 0; px < 4; px++){ //render player overlayed into double buffer
+            for(int py=0; py < 4; py++){
+
+                if(Tetrominos.shapes.get(player.PieceType).charAt(gm.getGameBoard().Rotate(px,py, player.Rotation)) == 'x'){
+                    DoubleBuffer[(player.YPos + py) * gm.getGameBoard().GetBoardWidth() + (player.XPos + px)] = player.PieceType;
+                }
+            }
+        }
+
         for (int grid: DoubleBuffer) {
             Rectangle r = new Rectangle(LeftOffset + xPos + padding, TopOffset+ yPos + padding,RenderSize,RenderSize);
 

@@ -1,6 +1,7 @@
 package com.jfxtetris.Views;
 
 import com.jfxtetris.Controllers.MediaManager;
+import com.jfxtetris.Controllers.ThemeSet;
 import com.jfxtetris.Models.Tetrominos;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -10,7 +11,7 @@ public class TetrinomoRenderer {
     Tetrominos pieces = new Tetrominos();
 
 
-    public Group RenderTetrinomo(int index, int RenderSize,  int padding, MediaManager media){
+    public Group RenderTetrinomo(int index, int RenderSize,  int padding, ThemeSet mediaTheme){
         Group renderArea = new Group();
 
        if(index == -1)
@@ -22,7 +23,7 @@ public class TetrinomoRenderer {
             Rectangle r = new Rectangle(xPos + padding, yPos + padding, RenderSize, RenderSize);
 
             if(c == 'x'){
-                r.setFill(media.GetCurrentTheme().getFromIndex(index));
+                r.setFill(mediaTheme.getFromIndex(index));
             }else
                 r.setFill(Color.TRANSPARENT);
             renderArea.getChildren().add(r);

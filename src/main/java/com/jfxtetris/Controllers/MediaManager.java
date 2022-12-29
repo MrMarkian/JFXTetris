@@ -1,5 +1,6 @@
 package com.jfxtetris.Controllers;
 import com.jfxtetris.Models.SoundTypes;
+import com.jfxtetris.Tetris;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -162,7 +163,7 @@ public class MediaManager {
             }
             case GameOver -> {
                 if (themes.get(themeInUse).GameOverSound == null)
-                    return;
+                    LoadClip("/Sounds/game-over-yeah.mp3").play();
                 if(!themes.get(themeInUse).GameOverSound.isPlaying())
                     themes.get(themeInUse).GameOverSound.play();
             }
@@ -171,7 +172,10 @@ public class MediaManager {
     }
 
     public void StartBackgroundMusic(){
-       PlayMidi(0);
+        int tune = 0;
+        if(Tetris.getMainUIController().gameSettings.isPlayBackGroundMusicRandomOrder)
+            tune = ThreadLocalRandom.current().nextInt(1, backgroundSongs.size()-1);
+       PlayMidi(tune);
     }
     public void StopBackgroundMusic(){
         if(sequencer != null)
@@ -185,6 +189,8 @@ public class MediaManager {
             currentBackgroundSong = 0;
         }
 
+        if(Tetris.getMainUIController().gameSettings.isPlayBackGroundMusicRandomOrder)
+            currentBackgroundSong = ThreadLocalRandom.current().nextInt(1,backgroundSongs.size()-1);
         PlayMidi(currentBackgroundSong);
 
     }

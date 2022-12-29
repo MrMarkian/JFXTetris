@@ -28,7 +28,7 @@ public class GameManager {
     Timer FPSTimer;
     Timer LogicTimer;
     Timer InputTimer;
-
+    Boolean isPaused;
 
     InputHandler input ;
     private boolean hardDrop;
@@ -53,20 +53,30 @@ public class GameManager {
     public void StartNewGame() {
             //process input
 
-            InputTimer = new Timer();
-            InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,gameBoard.settings.INPUTdelay);
-            //Game Logic
-            LogicTimer = new Timer();
-            LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, gameBoard.settings.lOGICdelay);
-            //Game Timing & Rendering
-            FPSTimer = new Timer();
-            FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.settings.FPSdelay);
+        StartGameTimers();
 
-            if(gameBoard.settings.timedGame)
+        if(gameBoard.settings.timedGame)
                 gameBoard.gameTime.StartTimer();
 
             if(gameBoard.settings.playBackGroundMusic)
                 media.StartBackgroundMusic();
+    }
+
+    private void StartGameTimers() {
+        InputTimer = new Timer();
+        InputTimer.scheduleAtFixedRate(new OnTimerInputUpdate(),0,gameBoard.settings.INPUTdelay);
+        //Game Logic
+        LogicTimer = new Timer();
+        LogicTimer.scheduleAtFixedRate(new OnTimerLogicUpdate(),0, gameBoard.settings.lOGICdelay);
+        //Game Timing & Rendering
+        FPSTimer = new Timer();
+        FPSTimer.scheduleAtFixedRate(new OnTimerEndGameTick(),0, gameBoard.settings.FPSdelay);
+    }
+
+    private void StopGameTimers(){
+        InputTimer.cancel();
+        LogicTimer.cancel();
+        FPSTimer.cancel();
     }
 
 
@@ -294,7 +304,7 @@ public class GameManager {
 
                nextPieceRender.getChildren().clear();
                for(int a = 0; a < gameBoard.numberOfNextPieces; a++) {
-                   nextPieceRender.getChildren().add(tetrinomoRenderer.RenderTetrinomo(gameBoard.settings.randomizer.PeekAt(a), 20, 3, media));
+                   nextPieceRender.getChildren().add(tetrinomoRenderer.RenderTetrinomo(gameBoard.settings.randomizer.PeekAt(a), 20, 3, media.GetCurrentTheme()));
                }
                if(!gameBoard.vLines.isEmpty()){
                    for (int line : gameBoard.vLines) {
@@ -341,6 +351,7 @@ public class GameManager {
 
     public void RequestShutdown(){
         gameBoard.gameOver = true;
+        gameBoard.gameTime.StopTimer();
         media.OnClose();
         CheckTimers(true);
     }
@@ -356,7 +367,7 @@ public class GameManager {
             }
 
             for (int a = 1; a < 8; a++) {
-                renderer.add(tetrinomoRenderer.RenderTetrinomo(a,10,0,media),0,a,1,1);
+                renderer.add(tetrinomoRenderer.RenderTetrinomo(a,10,0,media.GetCurrentTheme()),0,a,1,1);
 
                 Label tmpLabel =new Label(String.valueOf(tetrinomoStats[a]));
                 tmpLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 30));
@@ -364,6 +375,17 @@ public class GameManager {
             }
 
         }
+    }
+
+    public void PauseGame(boolean toggle){
+        isPaused = toggle;
+
+        if(isPaused){
+            StopGameTimers();
+        }else{
+           StartGameTimers();
+        }
+
     }
 
 

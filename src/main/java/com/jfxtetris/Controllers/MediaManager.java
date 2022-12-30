@@ -15,13 +15,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MediaManager {
+public class MediaManager implements Serializable {
     Sequencer sequencer;
     private int currentBackgroundSong = 0;
 
     private final List<AudioClip> voiceNumbers = new ArrayList<>();
     private final List<URI> backgroundSongs = new ArrayList<>();
-
     private final List<ThemeSet> themes = new ArrayList<>();
     private int themeInUse =2;
 
@@ -69,10 +68,7 @@ public class MediaManager {
         backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/22.mid")).toURI());
         backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/23.mid")).toURI());
 
-
-
         themes.add(new ThemeSet());
-
 
         themes.add(LoadImageSet(1));
         themes.add(LoadImageSet(2));
@@ -109,6 +105,35 @@ public class MediaManager {
                         Color.LIGHTGRAY);
     }
 
+    public void SaveTheme(String FilePath, int index){
+        try{
+            FileOutputStream fileOut = new FileOutputStream(new File(FilePath));
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(themes.get(index));
+            objectOut.close();
+            fileOut.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void LoadTheme(String FilePath){
+        try {
+            FileInputStream fileIn = new FileInputStream(FilePath);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            themes.add((ThemeSet) objectIn.readObject());
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void NextTheme(){
         themeInUse++;
         int setsToLoad = 2;
@@ -121,6 +146,10 @@ public class MediaManager {
     }
 
     public List<ThemeSet> GetAllThemes(){return themes ;}
+
+    public void LoadSingleTheme(String FilePath){
+
+    }
 
     private AudioClip LoadClip(String path){
         try {
@@ -162,8 +191,10 @@ public class MediaManager {
                     themes.get(themeInUse).SoftDropSound.play();
             }
             case GameOver -> {
-                if (themes.get(themeInUse).GameOverSound == null)
+                if (themes.get(themeInUse).GameOverSound == null) {
                     LoadClip("/Sounds/game-over-yeah.mp3").play();
+                    return;
+                }
                 if(!themes.get(themeInUse).GameOverSound.isPlaying())
                     themes.get(themeInUse).GameOverSound.play();
             }
@@ -181,6 +212,22 @@ public class MediaManager {
         if(sequencer != null)
             if(sequencer.isOpen())
                 sequencer.stop();
+    }
+
+    public void PauseBackgroundMusic(boolean toggle){
+        if(toggle) {
+            if (sequencer != null)
+                if (sequencer.isOpen())
+                    if (sequencer.isRunning())
+                        sequencer.stop();
+        }
+        else{
+            if(sequencer != null){
+                if (sequencer.isOpen())
+                    sequencer.start();
+            }
+        }
+
     }
 
     public void PlayNext(){

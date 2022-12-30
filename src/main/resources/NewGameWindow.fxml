@@ -33,14 +33,14 @@
                      <children>
                         <Label layoutX="24.0" layoutY="135.0" text="Bag Size:" />
                         <Spinner layoutX="80.0" layoutY="131.0" prefHeight="25.0" prefWidth="175.0" />
-                        <CheckBox layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Skip S, Z, O on first piece" />
-                        <RadioButton layoutX="16.0" layoutY="48.0" mnemonicParsing="false" selected="true" text="Start with no history">
+                        <CheckBox fx:id="SkipSZOCheckbox" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Skip S, Z, O on first piece" />
+                        <RadioButton fx:id="StartNoHistoryCheckbox" layoutX="16.0" layoutY="48.0" mnemonicParsing="false" selected="true" text="Start with no history">
                            <toggleGroup>
                               <ToggleGroup fx:id="History" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="16.0" layoutY="80.0" mnemonicParsing="false" text="TGM1 ( Z, Z, Z, Z)" toggleGroup="$History" />
-                        <RadioButton layoutX="16.0" layoutY="106.0" mnemonicParsing="false" text="TGM2 (Z, S, S, Z)" toggleGroup="$History" />
+                        <RadioButton fx:id="AddZZZCheckBox" layoutX="16.0" layoutY="80.0" mnemonicParsing="false" text="TGM1 ( Z, Z, Z, Z)" toggleGroup="$History" />
+                        <RadioButton fx:id="AddZSSZCheckBox" layoutX="16.0" layoutY="106.0" mnemonicParsing="false" text="TGM2 (Z, S, S, Z)" toggleGroup="$History" />
                      </children>
                   </AnchorPane>
               </content>

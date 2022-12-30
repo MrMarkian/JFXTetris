@@ -2,11 +2,12 @@ package com.jfxtetris.Controllers;
 
 import javafx.beans.value.ObservableValue;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GameTimer {
+public class GameTimer implements Serializable {
     private Duration gameTimer = Duration.ZERO;
     private final Timer timer = new Timer();
 

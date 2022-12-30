@@ -2,6 +2,9 @@ package com.jfxtetris;
 
 import com.jfxtetris.Controllers.MainWindowController;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventType;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -17,6 +20,26 @@ public class Tetris extends Application {
         ui = fxmlLoader.getController();
         stage.setTitle("Tetris!");
         stage.setScene(scene);
+
+        stage.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean lostFocus, Boolean gainFocus) {
+                if(getMainUIController().GetGameManager() == null)
+                    return;
+                if(lostFocus) {
+                    if(!getMainUIController().GetGameManager().getGameBoard().gameOver) {
+                        getMainUIController().GetGameManager().PauseGame(true);
+                        stage.setTitle("PAUSED!");
+                    }
+                }
+                if(gainFocus) {
+                    if(!getMainUIController().GetGameManager().getGameBoard().gameOver) {
+                        getMainUIController().GetGameManager().PauseGame(false);
+                        stage.setTitle("Tetris!");
+                    }
+                }
+            }
+        });
         stage.show();
 
         stage.setOnCloseRequest(we -> {

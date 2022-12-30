@@ -9,7 +9,7 @@ public class PieceRandomizer implements Serializable {
     GameModeRND modeRND;
     int bagSize = 7;
     List<Integer> piecebag = new ArrayList<>();
-
+    Boolean isFirstRun = true;
 
     public enum GameModeRND{
         NES,

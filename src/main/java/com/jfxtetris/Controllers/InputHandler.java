@@ -12,7 +12,9 @@ public class InputHandler {
     BooleanProperty leftPressed = new SimpleBooleanProperty();
     BooleanProperty rightPressed = new SimpleBooleanProperty();
     BooleanProperty spacePressed = new SimpleBooleanProperty();
-
+    BooleanProperty tPressed = new SimpleBooleanProperty();
+    BooleanProperty bPressed = new SimpleBooleanProperty();
+    BooleanProperty pPressed = new SimpleBooleanProperty();
     Scene referenceScene;
 
     public InputHandler(Scene ref){
@@ -35,6 +37,15 @@ public class InputHandler {
             if(e.getCode() == KeyCode.SPACE){
                 spacePressed.set(true);
             }
+            if(e.getCode() == KeyCode.T){
+                tPressed.set(true);
+            }
+            if(e.getCode() == KeyCode.B){
+                bPressed.set(true);
+            }
+            if(e.getCode() == KeyCode.P){
+                pPressed.set(true);
+            }
 
         });
 
@@ -55,7 +66,16 @@ public class InputHandler {
             if(e.getCode() == KeyCode.SPACE){
                 spacePressed.set(false);
             }
+            if(e.getCode() == KeyCode.T){
+                tPressed.set(false);
+            }
 
+            if(e.getCode() == KeyCode.B){
+                bPressed.set(false);
+            }
+            if(e.getCode() == KeyCode.P){
+                pPressed.set(false);
+            }
         });
 
     }

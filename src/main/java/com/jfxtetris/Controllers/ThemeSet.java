@@ -4,7 +4,9 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-public class ThemeSet {
+import java.io.Serializable;
+
+public class ThemeSet implements Serializable {
     String ThemeName;
     final Paint IPiece;
     final Paint OPiece;
@@ -128,6 +130,8 @@ public class ThemeSet {
        Padding = Color.GRAY;
        DestroyedPiece = Color.WHITESMOKE;
        EmptySpace = Color.BLACK;
+       GhostPiece = Color.CHARTREUSE;
+       GarbagePiece = Color.FIREBRICK;
     }
 
     @Override

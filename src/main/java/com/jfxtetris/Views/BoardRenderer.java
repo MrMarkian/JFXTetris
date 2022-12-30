@@ -48,23 +48,23 @@ public class BoardRenderer {
         graphicsContext.setBackground(Background.fill(gm.getMediaManager().GetCurrentTheme().getPadding()));
 
 
-        //Todo: Render ghostpiece
-        if(gm.getGameBoard().settings.showGhostPiece) {
-            for (int a = gm.getGameBoard().GetBoardHeight(); a > 0; a--) {
-                if (gm.getGameBoard().DoesPieceFit(player.PieceType, gm.getGameBoard().fallingPiece.Rotation, player.XPos, a-4)) {
-                    a = a -4;
+        //Render ghostpiece
+        if(gm.getGameBoard().settings.showGhostPiece && gm.getGameBoard().fallingPiece != null) {
+            for (int a = 0 ; a < gm.getGameBoard().GetBoardHeight(); a++) {
+                if (!gm.getGameBoard().DoesPieceFit(player.PieceType, gm.getGameBoard().fallingPiece.Rotation, player.XPos, a+4)) {
+                    a = a +4;
 
                     for (int px = 0; px < 4; px++) { //render player overlayed into double buffer
                         for (int py = 0; py < 4; py++) {
 
                             if (Tetrominos.shapes.get(player.PieceType).charAt(gm.getGameBoard().Rotate(px, py, player.Rotation)) == 'x') {
-                                DoubleBuffer[( a + py)  * gm.getGameBoard().GetBoardWidth() + (player.XPos + px)] = 10;
+                                DoubleBuffer[( a -1 + py)  * gm.getGameBoard().GetBoardWidth() + (player.XPos + px)] = 10;
                             }
                         }
                     }
-                    a=0;
+                    a=gm.getGameBoard().GetBoardHeight();
                 }
-               // System.out.println("Finding Y for Ghost:" + a + " GameHeight:" + gm.getGameBoard().GetBoardHeight());
+                System.out.println("Finding Y for Ghost:" + a + " GameHeight:" + gm.getGameBoard().GetBoardHeight());
             }
 
 

@@ -29,7 +29,6 @@ public class GameManager {
     Timer LogicTimer;
     Timer InputTimer;
     Boolean isPaused;
-
     InputHandler input ;
     private boolean hardDrop;
     private int hardDropLines =0;
@@ -51,7 +50,20 @@ public class GameManager {
     //Todo: Adjustable game timings
 
     public void StartNewGame() {
-            //process input
+
+        if(gameBoard.settings.startWithZZZZ){
+            gameBoard.pieceHistory.add(2);
+            gameBoard.pieceHistory.add(2);
+            gameBoard.pieceHistory.add(2);
+            gameBoard.pieceHistory.add(2);
+        }
+
+        if(gameBoard.settings.startWithZSSZ){
+            gameBoard.pieceHistory.add(2);
+            gameBoard.pieceHistory.add(6);
+            gameBoard.pieceHistory.add(6);
+            gameBoard.pieceHistory.add(2);
+        }
 
         StartGameTimers();
 
@@ -92,6 +104,11 @@ public class GameManager {
         if(input.leftPressed.get() || input.rightPressed.get())
             if(gameBoard.settings.playSoundEffects)
                 media.PlaySoundClip(SoundTypes.MoveSound);
+
+        if(input.tPressed.get())
+            media.NextTheme();
+        if(input.bPressed.get())
+            media.PlayNext();
 
         if(input.leftPressed.get()){
 
@@ -306,18 +323,20 @@ public class GameManager {
                for(int a = 0; a < gameBoard.numberOfNextPieces; a++) {
                    nextPieceRender.getChildren().add(tetrinomoRenderer.RenderTetrinomo(gameBoard.settings.randomizer.PeekAt(a), 20, 3, media.GetCurrentTheme()));
                }
-               if(!gameBoard.vLines.isEmpty()){
-                   for (int line : gameBoard.vLines) {
-                       for(int px = 1; px < gameBoard.GetBoardWidth() -1; px++){
-                           for (int py = line; py > 0; py--){
-                               gameBoard.GetBoard()[py * gameBoard.GetBoardWidth() + px] = gameBoard.GetBoard()[(py -1) * gameBoard.GetBoardWidth() + px];
-                               gameBoard.GetBoard()[px] =0;
+               if(gameBoard.totalGameTicks % (gameBoard.settings.FPSdelay * 4) == 0) {
+                   if (!gameBoard.vLines.isEmpty()) {
+                       for (int line : gameBoard.vLines) {
+                           for (int px = 1; px < gameBoard.GetBoardWidth() - 1; px++) {
+                               for (int py = line; py > 0; py--) {
+                                   gameBoard.GetBoard()[py * gameBoard.GetBoardWidth() + px] = gameBoard.GetBoard()[(py - 1) * gameBoard.GetBoardWidth() + px];
+                                   gameBoard.GetBoard()[px] = 0;
+                               }
                            }
                        }
+                       gameBoard.totalLines += gameBoard.vLines.size();
+                       hardDropLines = 0;
+                       gameBoard.vLines.clear();
                    }
-                    gameBoard.totalLines += gameBoard.vLines.size();
-                   hardDropLines = 0;
-                   gameBoard.vLines.clear();
                }
                UpdateBoards();
                UpdateUI();
@@ -378,12 +397,17 @@ public class GameManager {
     }
 
     public void PauseGame(boolean toggle){
+        if(gameBoard.gameOver)
+            return;
         isPaused = toggle;
+
 
         if(isPaused){
             StopGameTimers();
+            media.PauseBackgroundMusic(true);
         }else{
            StartGameTimers();
+           media.PauseBackgroundMusic(false);
         }
 
     }

@@ -67,6 +67,15 @@ public class NewGameWindowController extends Application implements Initializabl
     private TextField fpsDelayEntry;
     @FXML
     private Slider backroundMusicVolume;
+    @FXML
+    private CheckBox SkipSZOCheckbox;
+    @FXML
+    private RadioButton StartNoHistoryCheckbox;
+    @FXML
+    private RadioButton AddZZZCheckBox;
+    @FXML
+    private RadioButton AddZSSZCheckBox;
+
 
     ScoreManager sm = new ScoreManager();
 
@@ -89,6 +98,11 @@ public class NewGameWindowController extends Application implements Initializabl
         settings.backGroundMusicVolume = ((int) backroundMusicVolume.getValue());
         settings.scoreList = scoringPresetDropDown.getSelectionModel().getSelectedItem();
         settings.isPlayBackGroundMusicRandomOrder = RandomMusicOrderCheckbox.isSelected();
+        settings.startWithNoHistory = StartNoHistoryCheckbox.isSelected();
+        settings.skipSZOonFirstPiece = SkipSZOCheckbox.isSelected();
+        settings.startWithZZZZ = AddZZZCheckBox.isSelected();
+        settings.startWithZSSZ = AddZSSZCheckBox.isSelected();
+
         MainWindowController MainUi = Tetris.getMainUIController();
         MainUi.gameSettings = settings;
        Stage closed = (Stage) StartButton.getScene().getWindow();

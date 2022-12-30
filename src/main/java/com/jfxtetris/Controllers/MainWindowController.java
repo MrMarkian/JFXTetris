@@ -48,6 +48,8 @@ public class MainWindowController {
     public CheckMenuItem DarkModeMenu;
     @FXML
     public CheckMenuItem PauseGameCheckbox;
+    @FXML
+    public AnchorPane BackgroundAnchor;
 
     GameManager gameManager = null;
     public GameSettings gameSettings = new GameSettings();
@@ -70,6 +72,7 @@ public class MainWindowController {
             dialog.setTitle("New Game");
             dialog.setScene(scene);
             dialog.showAndWait();
+            BackgroundAnchor.setStyle("-fx-background-image:url('https://www.advantour.com/russia/images/moscow/moscow_red-square1.jpg'); -fx-background-repeat: no-repeat; -fx-background-position: center center; -fx-background-size: auto ;");
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -146,7 +149,8 @@ public class MainWindowController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Level File");
         File file =  fileChooser.showSaveDialog(null);
-
+        if(file == null)
+            return;
         gameManager.SaveGame(file.getPath());
     }
 

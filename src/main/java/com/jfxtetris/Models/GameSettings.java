@@ -18,7 +18,10 @@ public class GameSettings {
     public int rowVoicesVolume;
     public boolean playSoundEffects;
     public int soundEffectsVolume;
-
+    public boolean skipSZOonFirstPiece;
+    public boolean startWithZZZZ;
+    public boolean startWithZSSZ;
+    public boolean startWithNoHistory;
     public long FPSdelay;
     public long lOGICdelay;
     public long INPUTdelay;
@@ -44,6 +47,9 @@ public class GameSettings {
                 ", rowVoicesVolume=" + rowVoicesVolume +
                 ", playSoundEffects=" + playSoundEffects +
                 ", soundEffectsVolume=" + soundEffectsVolume +
+                ", skipSZOonFirstPiece=" + skipSZOonFirstPiece +
+                ", startWithZZZZ=" + startWithZZZZ +
+                ", startWithZSSZ=" + startWithZSSZ +
                 ", FPSdelay=" + FPSdelay +
                 ", lOGICdelay=" + lOGICdelay +
                 ", INPUTdelay=" + INPUTdelay +

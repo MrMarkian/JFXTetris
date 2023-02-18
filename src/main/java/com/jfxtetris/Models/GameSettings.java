@@ -1,6 +1,8 @@
 package com.jfxtetris.Models;
 
-public class GameSettings {
+import java.io.Serializable;
+
+public class GameSettings implements Serializable {
     public String playerName;
     public ScoreList scoreList;
     public boolean timedGame;
@@ -11,6 +13,7 @@ public class GameSettings {
 
     public GameModes mode;
     public PieceRandomizer randomizer;
+    public PieceRandomizer.GameModeRND randomizerMode;
     public boolean playBackGroundMusic;
     public boolean isPlayBackGroundMusicRandomOrder;
     public int backGroundMusicVolume;

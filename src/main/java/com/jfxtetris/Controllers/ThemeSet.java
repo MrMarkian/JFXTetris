@@ -27,6 +27,7 @@ public class ThemeSet implements Serializable {
     AudioClip HardDropSound;
     AudioClip SoftDropSound;
     AudioClip GameOverSound;
+    AudioClip TetrisLockSound;
 
 
     public Paint getIPiece() {
@@ -75,6 +76,34 @@ public class ThemeSet implements Serializable {
 
     public Paint getGhostPiece() {
         return GhostPiece;
+    }
+
+    public String getThemeName() {
+        return ThemeName;
+    }
+
+    public AudioClip getMoveSound() {
+        return MoveSound;
+    }
+
+    public AudioClip getSpinSound() {
+        return SpinSound;
+    }
+
+    public AudioClip getHardDropSound() {
+        return HardDropSound;
+    }
+
+    public AudioClip getSoftDropSound() {
+        return SoftDropSound;
+    }
+
+    public AudioClip getGameOverSound() {
+        return GameOverSound;
+    }
+
+    public AudioClip getTetrisLockSound() {
+        return TetrisLockSound;
     }
 
     public void setGhostPiece(Paint ghostPiece) {

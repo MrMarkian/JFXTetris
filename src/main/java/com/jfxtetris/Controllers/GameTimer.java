@@ -22,7 +22,12 @@ public class GameTimer implements Serializable {
     }
 
     public void StartTimer(){
-        timer.schedule(new timerRunner(), 1000, 1000);
+        try {
+            timer.schedule(new timerRunner(), 1000, 1000);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
 
     public void StopTimer(){

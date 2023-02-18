@@ -16,6 +16,10 @@ public class PieceRandomizer implements Serializable {
         TGM
     }
 
+    public GameModeRND GetRandomisationMode(){
+        return modeRND;
+    }
+
     public PieceRandomizer(GameModeRND mode){
         modeRND = mode;
         GenerateNewBag();
@@ -41,13 +45,12 @@ public class PieceRandomizer implements Serializable {
                 }else{
                     tmp = ThreadLocalRandom.current().nextInt(1, 7 + 1);
                     isFound = false;
-                    System.out.println("Duplicate Piece found -- " + tmp + " in Index:" + piecebag.indexOf(tmp));
+
                 }
 
             }
             if(!isFound) {
-                System.out.println("Out of options -- " + tmp);
-                piecebag.add(tmp);
+                   piecebag.add(tmp);
             }
         }
     }
@@ -55,7 +58,7 @@ public class PieceRandomizer implements Serializable {
     public int GetNextPiece(){
         int poppedPiece = piecebag.get(0);
         piecebag.remove(0);
-        System.out.println("Piece Removed From bag.." + piecebag.size() + " Remaining");
+
         if(piecebag.isEmpty())
             GenerateNewBag();
         return poppedPiece;

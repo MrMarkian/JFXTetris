@@ -1,6 +1,7 @@
 package com.jfxtetris.Controllers;
 import com.jfxtetris.Models.SoundTypes;
 import com.jfxtetris.Tetris;
+import javafx.application.Platform;
 import javafx.scene.image.Image;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -22,7 +23,7 @@ public class MediaManager implements Serializable {
     private final List<AudioClip> voiceNumbers = new ArrayList<>();
     private final List<URI> backgroundSongs = new ArrayList<>();
     private final List<ThemeSet> themes = new ArrayList<>();
-    private int themeInUse =2;
+    private int themeInUse =0;
 
     public MediaManager() throws URISyntaxException {
         try {
@@ -75,7 +76,7 @@ public class MediaManager implements Serializable {
 
         themes.get(2).MoveSound = LoadClip("/Sounds/Move.wav");
         themes.get(2).GameOverSound = LoadClip("/Sounds/game-over-yeah.mp3");
-        themes.get(2).SoftDropSound = LoadClip("/Sounds/SoftDrop.wav");
+        themes.get(2).SoftDropSound = LoadClip("/Sounds/TetrisLock.wav");
         themes.get(2).SpinSound = LoadClip("/Sounds/Rotate.wav");
 
         themes.get(0).ThemeName = "Classic";
@@ -167,36 +168,97 @@ public class MediaManager implements Serializable {
     public void PlaySoundClip(SoundTypes type){
         switch (type){
             case MoveSound -> {
-                if (themes.get(themeInUse).MoveSound == null)
+                if (themes.get(themeInUse).MoveSound == null){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            LoadClip("/Sounds/Move.wav").play();
+
+                        }
+                    });
                     return;
+
+                }
+
                 if(!themes.get(themeInUse).MoveSound.isPlaying())
                     themes.get(themeInUse).MoveSound.play();
             }
             case SpinSound -> {
-                if (themes.get(themeInUse).SpinSound == null)
+                if (themes.get(themeInUse).SpinSound == null){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            LoadClip("/Sounds/Rotate.wav").play();
+
+                        }
+                    });
                     return;
+
+                }
                 if(!themes.get(themeInUse).SpinSound.isPlaying())
                     themes.get(themeInUse).SpinSound.play();
             }
             case HardDrop -> {
-                if (themes.get(themeInUse).HardDropSound == null)
+                if (themes.get(themeInUse).HardDropSound == null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                               AudioClip tmpClip = LoadClip("/Sounds/HardDrop.wav");
+                               tmpClip.setVolume(0.5);
+                               tmpClip.play();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
                     return;
+
+                }
                 if(!themes.get(themeInUse).HardDropSound.isPlaying())
                     themes.get(themeInUse).HardDropSound.play();
             }
             case SoftDrop -> {
-                if (themes.get(themeInUse).SoftDropSound == null)
+                if (themes.get(themeInUse).SoftDropSound == null){
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            LoadClip("/Sounds/TetrisLock.wav").play();
+                        }
+                    });
                     return;
+
+                }
                 if(!themes.get(themeInUse).SoftDropSound.isPlaying())
                     themes.get(themeInUse).SoftDropSound.play();
             }
             case GameOver -> {
                 if (themes.get(themeInUse).GameOverSound == null) {
-                    LoadClip("/Sounds/game-over-yeah.mp3").play();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            LoadClip("/Sounds/game-over-yeah.mp3").play();
+
+                        }
+                    });
                     return;
                 }
                 if(!themes.get(themeInUse).GameOverSound.isPlaying())
                     themes.get(themeInUse).GameOverSound.play();
+            }
+            case TetrisLock -> {
+                if (themes.get(themeInUse).TetrisLockSound == null) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            LoadClip("/Sounds/SoftDrop.wav").play();
+
+                        }
+                    });
+                    return;
+                }
+                if(!themes.get(themeInUse).TetrisLockSound.isPlaying())
+                    themes.get(themeInUse).TetrisLockSound.play();
             }
         }
 

@@ -72,7 +72,9 @@ public class MainWindowController {
             dialog.setTitle("New Game");
             dialog.setScene(scene);
             dialog.showAndWait();
-            BackgroundAnchor.setStyle("-fx-background-image:url('https://www.advantour.com/russia/images/moscow/moscow_red-square1.jpg'); -fx-background-repeat: no-repeat; -fx-background-position: center center; -fx-background-size: auto ;");
+            String image = Objects.requireNonNull(MainWindowController.class.getResource("/Backgrounds/background1.jpg")).toExternalForm();
+            System.out.println(image);
+            BackgroundAnchor.setStyle("-fx-background-image:url(image); -fx-background-repeat: repeat; -fx-background-position: center center; -fx-background-size: auto ;");
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -134,6 +136,8 @@ public class MainWindowController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Level File");
         File file = fileChooser.showOpenDialog(null);
+        if(file == null)
+            return;
         if (gameManager == null) {
             try {
                 gameManager = new GameManager(new GameSettings(),RenderPane, OutBox, NextPieceBox, StatsGrid);

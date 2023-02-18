@@ -32,6 +32,7 @@ public class GameManager {
     InputHandler input ;
     private boolean hardDrop;
     private int hardDropLines =0;
+    public GameTimer gameTime;
 
     public GameManager(GameSettings settings, Pane renderPane, VBox out, HBox nextPiece, GridPane StatsGrid) throws URISyntaxException {
         RenderPane = renderPane;
@@ -41,6 +42,7 @@ public class GameManager {
         stats = StatsGrid;
         gameBoard = new GameBoard(settings);
         boardRenderer =  new BoardRenderer(this);
+        gameTime = new GameTimer();
     }
 
     //Todo: Add Line Limit Mode
@@ -68,7 +70,7 @@ public class GameManager {
         StartGameTimers();
 
         if(gameBoard.settings.timedGame)
-                gameBoard.gameTime.StartTimer();
+                gameTime.StartTimer();
 
             if(gameBoard.settings.playBackGroundMusic)
                 media.StartBackgroundMusic();
@@ -171,8 +173,8 @@ public class GameManager {
 
         if(input.spacePressed.get()){ //Hard Drop
             hardDrop = true;
-            if(gameBoard.settings.playSoundEffects)
-                media.PlaySoundClip(SoundTypes.HardDrop);
+//            if(gameBoard.settings.playSoundEffects)
+//                media.PlaySoundClip(SoundTypes.HardDrop);
         }
 
        // UpdateBoards();
@@ -223,8 +225,12 @@ public class GameManager {
                         gameBoard.forceDown = false;
                 }else{ //end turn
                     // - lock the playfield
-                    hardDrop = false;
-                    System.out.println("Hard Drop Lines:" + hardDropLines);
+                    if(hardDrop) {
+                        if(gameBoard.settings.playSoundEffects)
+                            media.PlaySoundClip(SoundTypes.HardDrop);
+                    }
+                        hardDrop = false;
+
                     gameBoard.player.Score += (hardDropLines * 10);
                     hardDropLines = 0;
 
@@ -261,27 +267,30 @@ public class GameManager {
                     switch (gameBoard.vLines.size()) {
                         case 1 -> {
                             gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Single);
-                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Single) + " To score .. now:" + gameBoard.player.Score);
+
                             media.PlayVoice(1);
                         }
                         case 2 -> {
                             gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Double);
-                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Double) + " To score");
+
                             media.PlayVoice(2);
                         }
                         case 3 -> {
                             gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Triple);
-                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Triple) + " To score");
+
                             media.PlayVoice(3);
                         }
                         case 4 -> {
                             gameBoard.player.Score += gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Quad);
-                            System.out.println("Adding :" + gameBoard.settings.scoreList.tetrisScore.get(TetrisType.Quad) + " To score");
+
                             media.PlayVoice(4);
                         }
                         default -> {
                         }
                     }
+
+                    if(gameBoard.settings.playSoundEffects)
+                        media.PlaySoundClip(SoundTypes.TetrisLock);
 
                     // choose next piece                                                                                                                                                                                                                                                                                                                                                                                      8
                     gameBoard.pieceHistory.add(gameBoard.fallingPiece.PieceType);
@@ -313,11 +322,12 @@ public class GameManager {
            }
 
            gameBoard.totalGameTicks++;
+           if(gameBoard.totalGameTicks % CalculateGameSpeedNES(gameBoard.player.Level) == 0){
+               gameBoard.forceDown = true;
+           }
+
 
            Platform.runLater(()->{
-               if(gameBoard.totalGameTicks % CalculateGameSpeedNES(gameBoard.player.Level) == 0){
-                   gameBoard.forceDown = true;
-               }
 
                nextPieceRender.getChildren().clear();
                for(int a = 0; a < gameBoard.numberOfNextPieces; a++) {
@@ -361,7 +371,7 @@ public class GameManager {
                 ((Label)n).setText("LEVEL: " + gameBoard.player.Level);
             }
             if(n.getId().equals("gameTimeLabel")){
-                ((Label)n).setText("TIME: " + gameBoard.gameTime.GetGameTime());
+                ((Label)n).setText("TIME: " + gameTime.GetGameTime());
             }
         }
         RenderStatsGrid(stats);
@@ -370,7 +380,7 @@ public class GameManager {
 
     public void RequestShutdown(){
         gameBoard.gameOver = true;
-        gameBoard.gameTime.StopTimer();
+        gameTime.StopTimer();
         media.OnClose();
         CheckTimers(true);
     }
@@ -471,6 +481,7 @@ public class GameManager {
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(gameBoard);
             out.close();
+            MainWindowController.DisplayAlert("Game Saved", "Game Saved", "High Score and Game Timer will be disabled.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -485,6 +496,11 @@ public class GameManager {
             gameBoard = (GameBoard) in.readObject();
             in.close();
             fileIn.close();
+            if(gameBoard.settings.playBackGroundMusic){
+                media.StartBackgroundMusic();
+            }
+            gameBoard.settings.timedGame = false;
+
         } catch (ClassNotFoundException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -492,7 +508,7 @@ public class GameManager {
         MainWindowController.DisplayAlert("Game Loaded", "Game Loaded", "Game Loaded");
         gameBoard.gameOver = false;
         try {
-            StartNewGame();
+            StartGameTimers();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

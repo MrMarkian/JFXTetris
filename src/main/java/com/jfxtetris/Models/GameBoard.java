@@ -24,14 +24,13 @@ public class GameBoard implements Serializable {
     final public Player player = new Player();
     final public GameSettings settings;
     public CurrentPiece fallingPiece;
-    public GameTimer gameTime;
+
 
     public GameBoard(GameSettings settings){
         boardInit();
         this.settings = settings;
         fallingPiece = new CurrentPiece();
-        gameTime = new GameTimer();
-    }
+   }
 
     private void boardInit(){
         playField = new int [BoardWidth * BoardHeight];
@@ -44,10 +43,16 @@ public class GameBoard implements Serializable {
     }
 
     public class CurrentPiece implements Serializable{
-        final public int PieceType = settings.randomizer.GetNextPiece();
+        public int PieceType;
         public int Rotation = 0;
         public int XPos = GetBoardWidth() / 2;
         public int YPos = 0;
+
+        public CurrentPiece(){
+           if(settings.randomizer == null)
+                settings.randomizer = new PieceRandomizer(settings.randomizerMode);
+            PieceType = settings.randomizer.GetNextPiece();
+        }
     }
 
     //--Getter/Setter
@@ -91,7 +96,7 @@ public class GameBoard implements Serializable {
                     if (nPosY + py >= 0 && nPosY + py < BoardHeight)
                     {
                         // In Bounds so do collision check
-                        if (Tetrominos.shapes.get(nTetromino).charAt(pi) == 'x' && playField[fi] != 0)
+                        if (Tetrominos.shapes.get(nTetromino).charAt(pi) == 'x' && playField[fi] > 0)
                             return false;
                     }
                 }

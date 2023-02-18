@@ -17,8 +17,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Optional;
@@ -92,6 +94,17 @@ public class ThemeWindowController extends Application implements Initializable 
             inEditMode = true;
 
         });
+    }
+
+    @FXML
+    public void LoadThemeClick(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Theme File");
+        File file = fileChooser.showOpenDialog(null);
+        if(file != null){
+            mediaManager.LoadTheme(file.getAbsolutePath());
+        }
+
     }
 
 

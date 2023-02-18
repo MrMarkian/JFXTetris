@@ -92,6 +92,7 @@ public class NewGameWindowController extends Application implements Initializabl
         settings.playSoundEffects = playSoundsCheckbox.isSelected();
         settings.timedGame = timedGameCheckBox.isSelected();
         settings.randomizer = new PieceRandomizer(randomiserDropdown.getSelectionModel().getSelectedItem());
+        settings.randomizerMode =randomiserDropdown.getSelectionModel().getSelectedItem();
         settings.INPUTdelay = Integer.parseInt(inputDelayEntry.getText());
         settings.lOGICdelay = Integer.parseInt(logicDelayEntry.getText());
         settings.FPSdelay = Integer.parseInt(fpsDelayEntry.getText());

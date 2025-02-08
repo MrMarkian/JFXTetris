@@ -6,18 +6,23 @@ import com.jfxtetris.Views.TetrinomoRenderer;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import java.io.*;
-import java.net.URISyntaxException;
-import java.util.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+
+import java.io.*;
+import java.net.URISyntaxException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class GameManager {
     GameBoard gameBoard;
     BoardRenderer boardRenderer;
-    MediaManager media = new MediaManager();
+    MediaManager media = MediaManager.getInstance();
     TetrinomoRenderer tetrinomoRenderer = new TetrinomoRenderer();
 
     Pane RenderPane;
@@ -43,6 +48,10 @@ public class GameManager {
         gameBoard = new GameBoard(settings);
         boardRenderer =  new BoardRenderer(this);
         gameTime = new GameTimer();
+    }
+
+    public GameManager()throws URISyntaxException{
+
     }
 
     //Todo: Add Line Limit Mode
@@ -410,8 +419,6 @@ public class GameManager {
         if(gameBoard.gameOver)
             return;
         isPaused = toggle;
-
-
         if(isPaused){
             StopGameTimers();
             media.PauseBackgroundMusic(true);
@@ -464,7 +471,6 @@ public class GameManager {
             case 16:
             case 17:
             case 18: return 3;
-
         }
 
         if (level >= 19 && level <= 28)

@@ -1,4 +1,5 @@
 package com.jfxtetris.Controllers;
+
 import com.jfxtetris.Models.SoundTypes;
 import com.jfxtetris.Tetris;
 import javafx.application.Platform;
@@ -25,7 +26,25 @@ public class MediaManager implements Serializable {
     private final List<ThemeSet> themes = new ArrayList<>();
     private int themeInUse =0;
 
-    public MediaManager() throws URISyntaxException {
+    AudioClip MoveSound;
+    AudioClip SpinSound;
+    AudioClip HardDropSound;
+    AudioClip SoftDropSound;
+    AudioClip GameOverSound;
+    AudioClip TetrisLockSound;
+
+    private static final MediaManager instance;
+    static {
+        try {
+            instance = new MediaManager();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static synchronized MediaManager getInstance() {return instance;}
+
+    private MediaManager() throws URISyntaxException {
         try {
             this.sequencer =MidiSystem.getSequencer();
         } catch (MidiUnavailableException e) {
@@ -69,19 +88,18 @@ public class MediaManager implements Serializable {
         backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/22.mid")).toURI());
         backgroundSongs.add(Objects.requireNonNull(getClass().getResource("/Midi/23.mid")).toURI());
 
-        themes.add(new ThemeSet());
 
         themes.add(LoadImageSet(1));
         themes.add(LoadImageSet(2));
 
-        themes.get(2).MoveSound = LoadClip("/Sounds/Move.wav");
-        themes.get(2).GameOverSound = LoadClip("/Sounds/game-over-yeah.mp3");
-        themes.get(2).SoftDropSound = LoadClip("/Sounds/TetrisLock.wav");
-        themes.get(2).SpinSound = LoadClip("/Sounds/Rotate.wav");
 
-        themes.get(0).ThemeName = "Classic";
-        themes.get(1).ThemeName = "Rounded";
-        themes.get(2).ThemeName = "GameBoy";
+        MoveSound = LoadClip("/Sounds/Move.wav");
+        GameOverSound = LoadClip("/Sounds/game-over-yeah.mp3");
+        SoftDropSound = LoadClip("/Sounds/TetrisLock.wav");
+        SpinSound = LoadClip("/Sounds/Rotate.wav");
+
+        themes.get(0).ThemeName = "Rounded";
+        themes.get(1).ThemeName = "GameBoy";
 
     }
 
@@ -92,27 +110,34 @@ public class MediaManager implements Serializable {
 
     private ThemeSet LoadImageSet(int count){
         return
-                new ThemeSet(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/I.png")).toString())),
-                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set"+ count + "/O.png")).toString())),
-                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/T.png")).toString())),
-                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/J.png")).toString())),
-                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/L.png")).toString())),
-                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/S.png")).toString())),
-                        new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/Z.png")).toString())),
-                        Color.DARKGREEN,
-                        Color.DARKGREEN,
-                        Color.FIREBRICK,
-                        Color.LIGHTGREEN,
-                        Color.LIGHTGRAY);
+                new ThemeSet(LoadImagePatternFromFile(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/I.png")).toString()),
+                        LoadImagePatternFromFile(Objects.requireNonNull(getClass().getResource("/Images/set"+ count + "/O.png")).toString()),
+                        LoadImagePatternFromFile(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/T.png")).toString()),
+                        LoadImagePatternFromFile(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/J.png")).toString()),
+                        LoadImagePatternFromFile(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/L.png")).toString()),
+                        LoadImagePatternFromFile(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/S.png")).toString()),
+                        LoadImagePatternFromFile(Objects.requireNonNull(getClass().getResource("/Images/set" + count + "/Z.png")).toString()),
+                        Color.BLANCHEDALMOND,
+                        null,
+                        Color.GRAY,
+                        null,
+                        Color.DARKCYAN);
     }
 
-    public void SaveTheme(String FilePath, int index){
+    private ImagePattern LoadImagePatternFromFile(String fileLocation){
+
+        return new ImagePattern(new Image(fileLocation));
+    }
+
+
+    public void SaveTheme(String FilePath, ThemeSet theme){
         try{
             FileOutputStream fileOut = new FileOutputStream(new File(FilePath));
             ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
-            objectOut.writeObject(themes.get(index));
+            objectOut.writeObject(theme);
             objectOut.close();
             fileOut.close();
+
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -168,7 +193,7 @@ public class MediaManager implements Serializable {
     public void PlaySoundClip(SoundTypes type){
         switch (type){
             case MoveSound -> {
-                if (themes.get(themeInUse).MoveSound == null){
+                if (MoveSound == null){
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -180,11 +205,11 @@ public class MediaManager implements Serializable {
 
                 }
 
-                if(!themes.get(themeInUse).MoveSound.isPlaying())
-                    themes.get(themeInUse).MoveSound.play();
+                MoveSound.stop();
+                   MoveSound.play();
             }
             case SpinSound -> {
-                if (themes.get(themeInUse).SpinSound == null){
+                if (SpinSound == null){
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -195,11 +220,11 @@ public class MediaManager implements Serializable {
                     return;
 
                 }
-                if(!themes.get(themeInUse).SpinSound.isPlaying())
-                    themes.get(themeInUse).SpinSound.play();
+                SpinSound.stop();
+                    SpinSound.play();
             }
             case HardDrop -> {
-                if (themes.get(themeInUse).HardDropSound == null) {
+                if (HardDropSound == null) {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -215,11 +240,11 @@ public class MediaManager implements Serializable {
                     return;
 
                 }
-                if(!themes.get(themeInUse).HardDropSound.isPlaying())
-                    themes.get(themeInUse).HardDropSound.play();
+                HardDropSound.stop();
+                    HardDropSound.play();
             }
             case SoftDrop -> {
-                if (themes.get(themeInUse).SoftDropSound == null){
+                if (SoftDropSound == null){
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -229,11 +254,11 @@ public class MediaManager implements Serializable {
                     return;
 
                 }
-                if(!themes.get(themeInUse).SoftDropSound.isPlaying())
-                    themes.get(themeInUse).SoftDropSound.play();
+                    SoftDropSound.stop();
+                    SoftDropSound.play();
             }
             case GameOver -> {
-                if (themes.get(themeInUse).GameOverSound == null) {
+                if (GameOverSound == null) {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -243,11 +268,11 @@ public class MediaManager implements Serializable {
                     });
                     return;
                 }
-                if(!themes.get(themeInUse).GameOverSound.isPlaying())
-                    themes.get(themeInUse).GameOverSound.play();
+                if(!GameOverSound.isPlaying())
+                    GameOverSound.play();
             }
             case TetrisLock -> {
-                if (themes.get(themeInUse).TetrisLockSound == null) {
+                if (TetrisLockSound == null) {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -257,8 +282,8 @@ public class MediaManager implements Serializable {
                     });
                     return;
                 }
-                if(!themes.get(themeInUse).TetrisLockSound.isPlaying())
-                    themes.get(themeInUse).TetrisLockSound.play();
+                TetrisLockSound.stop();
+                    TetrisLockSound.play();
             }
         }
 
@@ -319,9 +344,15 @@ public class MediaManager implements Serializable {
         }
 
         try {
-            sequencer.open();
+            Soundbank soundfont = MidiSystem.getSoundbank(Objects.requireNonNull(getClass().getResource("/Midi/8bitsf.SF2")));
+            Synthesizer synthesizer = MidiSystem.getSynthesizer();
 
+            sequencer.open();
+            synthesizer.open();
+            synthesizer.loadAllInstruments(soundfont);
             sequencer.setSequence(backgroundSongs.get(tuneIndex).toURL().openStream());
+
+            sequencer.getTransmitter().setReceiver(synthesizer.getReceiver());
 
             sequencer.start();
             SetBackgroundVolume(1);

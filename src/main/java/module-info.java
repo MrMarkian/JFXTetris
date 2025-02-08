@@ -4,6 +4,9 @@ module com.jfxtetris.jfxtetris {
 
     requires java.desktop;
     requires javafx.media;
+    requires javafx.graphics;
+    requires javafx.base;
+    requires javafx.swing;
 
     opens com.jfxtetris to javafx.fxml;
     exports com.jfxtetris;

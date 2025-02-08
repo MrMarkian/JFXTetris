@@ -10,11 +10,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="450.0" prefWidth="858.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jfxtetris.Controllers.ThemeWindowController">
+<AnchorPane prefHeight="502.0" prefWidth="857.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jfxtetris.Controllers.ThemeWindowController">
    <children>
-      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-154.0" AnchorPane.topAnchor="0.0">
+      <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox>
+            <VBox prefHeight="502.0" prefWidth="331.0" spacing="5.0">
                <children>
                   <ListView fx:id="themeList" onEditCommit="#SwitchThemeSelection" VBox.vgrow="ALWAYS">
                      <opaqueInsets>
@@ -23,21 +23,28 @@
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
+                     <VBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </VBox.margin>
                   </ListView>
-                  <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                  <ButtonBar buttonMinWidth="100.0" VBox.vgrow="NEVER">
                     <buttons>
-                      <Button mnemonicParsing="false" onAction="#NewThemeClick" prefHeight="25.0" prefWidth="119.0" text="New" />
-                        <Button mnemonicParsing="false" text="Load Theme" />
+                      <Button mnemonicParsing="false" onAction="#NewThemeClick" prefHeight="25.0" prefWidth="125.0" text="New" />
+                        <Button mnemonicParsing="false" onAction="#LoadThemeClick" text="Load Theme" />
+                        <Button mnemonicParsing="false" onAction="#SaveThemeClick" text="Save Theme" />
                     </buttons>
+                     <padding>
+                        <Insets bottom="5.0" right="25.0" />
+                     </padding>
                   </ButtonBar>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </VBox>
-            <VBox HBox.hgrow="ALWAYS">
+            <VBox HBox.hgrow="NEVER">
                <children>
-                  <TabPane tabClosingPolicy="UNAVAILABLE" tabMinWidth="25.0" VBox.vgrow="ALWAYS">
+                  <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
                     <tabs>
                         <Tab text="Preview">
                           <content>
@@ -46,55 +53,58 @@
                         </Tab>
                       <Tab text="I">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane fx:id="IPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                         </content>
                       </Tab>
                       <Tab text="Z">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane fx:id="ZPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                         </content>
                       </Tab>
                         <Tab text="O">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="OPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                         <Tab text="L">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="LPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                         <Tab text="J">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="JPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                         <Tab text="S">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="SPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                         <Tab text="T">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="TPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                         <Tab text="Border">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="BorderPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                         <Tab text="Empty">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="EmptyPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                         <Tab text="Background">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane fx:id="BackgroundPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                           </content>
                         </Tab>
                     </tabs>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
                   </TabPane>
                </children>
                <padding>
@@ -107,4 +117,7 @@
          </opaqueInsets>
       </HBox>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </AnchorPane>

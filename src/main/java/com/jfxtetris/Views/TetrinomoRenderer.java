@@ -1,6 +1,5 @@
 package com.jfxtetris.Views;
 
-import com.jfxtetris.Controllers.MediaManager;
 import com.jfxtetris.Controllers.ThemeSet;
 import com.jfxtetris.Models.Tetrominos;
 import javafx.scene.Group;
@@ -25,7 +24,7 @@ public class TetrinomoRenderer {
             if(c == 'x'){
                 r.setFill(mediaTheme.getFromIndex(index));
             }else
-                r.setFill(Color.TRANSPARENT);
+                r.setFill(Color.TRANSPARENT); // Todo: Maybe expand this out a bit.. maybe a image grid?
             renderArea.getChildren().add(r);
             currentSquare ++;
             xPos += RenderSize + padding;

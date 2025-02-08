@@ -6,6 +6,10 @@ import java.util.List;
 public class Tetrominos {
     public static final List<String> shapes = new ArrayList<>();
 
+    public enum PieceNames{
+
+    }
+
     public Tetrominos(){
 
         shapes.add( "...." + //Zero state is invalid.. should not be used.

@@ -8,6 +8,7 @@ import javafx.scene.effect.Glow;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -146,6 +147,7 @@ public class BoardRenderer {
                 case 9:{
 
                     r.setFill(gm.getMediaManager().GetCurrentTheme().getBoarder());
+
                     break;
                 }
                 case 10:{ //Ghost Piece

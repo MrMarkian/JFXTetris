@@ -68,13 +68,14 @@ public class MainWindowController {
 
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindowController.class.getResource("/NewGameWindow.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-            dialog.setResizable(false);
+
+            dialog.setResizable(true);
             dialog.setTitle("New Game");
             dialog.setScene(scene);
             dialog.showAndWait();
             String image = Objects.requireNonNull(MainWindowController.class.getResource("/Backgrounds/background1.jpg")).toExternalForm();
             System.out.println(image);
-            BackgroundAnchor.setStyle("-fx-background-image:url(image); -fx-background-repeat: repeat; -fx-background-position: center center; -fx-background-size: auto ;");
+            //BackgroundAnchor.setStyle("-fx-background-image:url(image); -fx-background-repeat: repeat; -fx-background-position: center center; -fx-background-size: auto ;");
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -172,11 +173,9 @@ public class MainWindowController {
 
     @FXML
     public void showThemeManager(){
-        if(gameManager == null) //Todo: Clean this up. program should be able to show window manager if no game playing..
-            return;
         ThemeWindowController themeWindowController ;
-        themeWindowController = new ThemeWindowController(gameManager.media);
-        themeWindowController.SetMananger(gameManager.media);
+        themeWindowController = new ThemeWindowController();
+        themeWindowController.SetMananger(MediaManager.getInstance());
         try {
             themeWindowController.start(new Stage());
         } catch (Exception e) {
